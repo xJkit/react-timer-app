@@ -1,11 +1,16 @@
 .clock{
-  background-color: map-get($foundation-palette, primary);
   display: inline-block;
   border-radius: 100%;
   color: $white;
   width: 300px;
   height: 300px;
   margin: 20px;
+  &.primary{
+    background-color: map-get($foundation-palette, primary);
+  }
+  &.alert{
+    background-color: map-get($foundation-palette, alert);
+  }
 }
 
 span.sec{

@@ -1,7 +1,13 @@
 import React from 'react'
 
 const Controls = (props) => {
-  const {isPlaying, onIsPlay} = props
+  const {isPlaying, onIsPlay, onTimeTicking} = props
+
+  const onStart = (bool) => {
+    onIsPlay(bool)
+    setInteval(onTimeTicking(), 1000)
+  }
+
 
   const renderButton = (cond) => {
     if (cond){
@@ -14,7 +20,7 @@ const Controls = (props) => {
     } else {
       return (
         <div className="button-group controls">
-          <button onClick={() => onIsPlay(true)} className="button primary left">Start</button>
+          <button onClick={() => onStart(true)} className="button primary left">Start</button>
           <button className="button primary hollow right">Clear</button>
         </div>
       )
