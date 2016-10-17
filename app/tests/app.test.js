@@ -1,7 +1,8 @@
-var expect = require('expect');
+const {expect} = require('chai')
 
-describe('App', () => {
-  it('should properly run tests', () => {
-    expect(1).toBe(1);
+//Sanity Check
+describe('Sanity Check', () => {
+  it('基本 npm 腳本測試', () => {
+    expect(1).to.be.equal(1)
   });
 });

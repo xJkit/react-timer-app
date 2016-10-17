@@ -4,7 +4,7 @@ module.exports = function (config) {
   config.set({
     browsers: ['Chrome'],
     singleRun: true,
-    frameworks: ['mocha'],
+    frameworks: ['mocha', 'chai'],
     files: [
       'node_modules/jquery/dist/jquery.min.js',
       'node_modules/foundation-sites/dist/foundation.min.js',
