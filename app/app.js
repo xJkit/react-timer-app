@@ -1,9 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {Route, Router, IndexRoute, hashHistory} from 'react-router'
-
-// Load components
-import Main from 'Main'
+import routes from 'routes'
 
 // Load foundation
 $(document).foundation();
@@ -12,9 +9,6 @@ $(document).foundation();
 import 'style!css!sass!applicationStyles'
 
 ReactDOM.render(
-  <Router history={hashHistory}>
-    <Route path="/" component={Main}>
-    </Route>
-  </Router>
-  ,document.getElementById('app')
+  routes,
+  document.getElementById('app')
 );
