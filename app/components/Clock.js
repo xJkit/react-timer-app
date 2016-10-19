@@ -1,6 +1,5 @@
 import React, {PropTypes} from 'react'
 
-
 const Clock = (props) => {
   //helper functions
 
@@ -33,5 +32,4 @@ Clock.defaultProps = {
 Clock.propTypes = {
   sec: PropTypes.number.isRequired
 }
-
 export default Clock

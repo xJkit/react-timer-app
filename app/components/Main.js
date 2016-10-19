@@ -12,11 +12,16 @@ class Main extends Component {
   constructor(props){
     super(props)
     this.state = {
-      isPlaying: false
+      isPlaying: false,
+      sec: 0,
+      min: 0
     }
   }
-  // <Timer {...this.state} onIsPlay={ (cond) => this.handleIsPlay(cond) } />
-
+  // <Timer
+  //   {...this.state}
+  //   onIsPlay={ (cond) => this.handleIsPlay(cond) }
+  //   onTimeTicking={() => this.handleTimeTicking()}
+  // />
   render(){
     return(
       <div>
@@ -32,6 +37,14 @@ class Main extends Component {
     } else {
       this.setState({isPlaying: false})
     }
+  }
+
+  handleTimeTicking(){
+    const {sec, min} = this.state
+    setInterval(this.setState({
+      sec: sec + 1
+    }), 1000)
+    setInterval(console.log('setInterval executed!'), 1000)
   }
 
 }

@@ -7,8 +7,8 @@ const Timer = (props) => {
   return (
     <div className="container">
       <h1>Timer</h1>
-      <Clock />
-      <Controls {...props} onIsPlay={(cond) => props.onIsPlay(cond) }/>
+      <Clock {...props} />
+      <Controls {...props} />
     </div>)
 
 }
