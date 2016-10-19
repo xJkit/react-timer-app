@@ -8,10 +8,10 @@ module.exports = function (config) {
     files: [
       'node_modules/jquery/dist/jquery.min.js',
       'node_modules/foundation-sites/dist/foundation.min.js',
-      'app/tests/**/*.test.js'
+      'app/tests/**/*.spec.js'
     ],
     preprocessors: {
-      'app/tests/**/*.test.js': ['webpack', 'sourcemap']
+      'app/tests/**/*.spec.js': ['webpack', 'sourcemap']
     },
     reporters: ['mocha'],
     client: {
@@ -21,7 +21,7 @@ module.exports = function (config) {
     },
     webpack: webpackConfig,
     webpackServer: {
-      noInfo: true
+      noInfo: true // please don't spam the console when running in karma
     }
   });
 };

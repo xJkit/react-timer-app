@@ -11,7 +11,6 @@ const ROOT = '/'
 class Main extends Component {
   constructor(props){
     super(props)
-
     this.state = {
       isPlaying: false
     }
@@ -26,7 +25,6 @@ class Main extends Component {
       </div>
     )
   }
-
 
   handleIsPlay(cond){
     if (cond){
