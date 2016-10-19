@@ -19,7 +19,7 @@ const Clock = (props) => {
   }
 
   return(
-    <div className="clock warning">
+    <div className="clock primary">
       <span className="sec">{formatSeconds(props.sec)}</span>
     </div>
   )
@@ -32,4 +32,5 @@ Clock.defaultProps = {
 Clock.propTypes = {
   sec: PropTypes.number.isRequired
 }
+
 export default Clock

@@ -1,10 +1,14 @@
 .clock{
-  display: inline-block;
-  border-radius: 100%;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
   color: $white;
-  width: 300px;
-  height: 300px;
+  width: 14rem;
+  height: 14rem;
   margin: 20px;
+
   &.primary{
     background-color: map-get($foundation-palette, primary);
   }
@@ -16,5 +20,4 @@
 span.sec{
   color: $white;
   font-size: 3rem;
-  line-height: 300px;
 }
