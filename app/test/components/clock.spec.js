@@ -22,7 +22,7 @@ describe('Component Test: <Clock />', () => {
   })
 
   it('check the sec rendered equals the props', () => {
-    const wrapper = mount(<Clock sec={61} />)
+    const wrapper = mount(<Clock totalSec={61} />)
     expect(wrapper.find('.sec').text()).to.equal('01:01')
   })
 })

@@ -1,8 +1,8 @@
 import React, {PropTypes} from 'react'
 
 const Clock = (props) => {
-  //helper functions
-
+  const {totalSec} = props
+  //------- helper functions
   const formatSeconds = (totalSeconds) => {
     let sec = totalSeconds % 60
     let min = Math.floor(totalSeconds / 60)
@@ -17,20 +17,22 @@ const Clock = (props) => {
 
     return `${min}:${sec}`
   }
+  // --------
 
   return(
     <div className="clock primary">
-      <span className="sec">{formatSeconds(props.sec)}</span>
+      <span className="sec">{formatSeconds(totalSec)}</span>
     </div>
   )
 }
 
-// default values and some checks
+//checks
 Clock.defaultProps = {
-  sec: 0
+  totalSec: 0
 }
+
 Clock.propTypes = {
-  sec: PropTypes.number.isRequired
+  totalSec: PropTypes.number.isRequired
 }
 
 export default Clock
