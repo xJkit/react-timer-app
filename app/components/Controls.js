@@ -1,37 +1,33 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 
 const Controls = (props) => {
-  const {isPlaying, onIsPlay, onTimeTicking} = props
-
-  const onStart = (bool) => {
-    onIsPlay(bool)
-    setInteval(onTimeTicking(), 1000)
-  }
-
-
-  const renderButton = (cond) => {
-    if (cond){
+  const {countStatus} = props
+  const renderStartStopBtn = () => {
+    if (countStatus == 'counting'){
       return(
-        <div className="button-group controls">
-          <button onClick={() => onIsPlay(false)} className="button alert left">Pause</button>
-          <button  className="button alert hollow right">Loop</button>
+        <div className="button-group">
+          <button className="button alert ">Pause</button>
         </div>
       )
-    } else {
+    } else if (countStatus == 'paused'){
       return (
-        <div className="button-group controls">
-          <button onClick={() => onStart(true)} className="button primary left">Start</button>
-          <button className="button primary hollow right">Clear</button>
+        <div className="button-group">
+          <button className="button primary ">Start</button>
         </div>
       )
     }
   }
 
   return (
-    <div>
-      {renderButton(isPlaying)}
+    <div className="controls">
+      {renderStartStopBtn()}
+      <button className="button hollow primary">Clear</button>
     </div>
   )
+}
+
+Controls.propTypes = {
+  countStatus: PropTypes.string.isRequired
 }
 
 
