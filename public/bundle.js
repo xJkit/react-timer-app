@@ -28241,7 +28241,7 @@
 	};
 	
 	Clock.propTypes = {
-	  totalSec: _react.PropTypes.number.isRequired
+	  totalSec: _react.PropTypes.number
 	};
 	
 	exports["default"] = Clock;
@@ -28377,8 +28377,7 @@
 	    var _this = _possibleConstructorReturn(this, (Countdown.__proto__ || Object.getPrototypeOf(Countdown)).call(this, props));
 	
 	    _this.state = {
-	      totalSec: 0,
-	      countStatus: 'stopped'
+	      totalSec: 0
 	    };
 	    return _this;
 	  }
@@ -28400,13 +28399,22 @@
 	            'Countdown'
 	          ),
 	          _react2['default'].createElement(_Clock2['default'], { totalSec: totalSec }),
-	          _react2['default'].createElement(_CountdownForm2['default'], { setTotalSec: function () {
+	          _react2['default'].createElement(_CountdownForm2['default'], {
+	            setTotalSec: function () {
 	              function setTotalSec(sec) {
 	                return _this2.setTotalSec(sec);
 	              }
 	
 	              return setTotalSec;
-	            }() })
+	            }(),
+	            setCountStatus: function () {
+	              function setCountStatus(status) {
+	                return _this2.setCountStatus(status);
+	              }
+	
+	              return setCountStatus;
+	            }()
+	          })
 	        );
 	      }
 	
@@ -28418,14 +28426,17 @@
 	      function componentDidUpdate(prevProps, prevState) {
 	        var _this3 = this;
 	
-	        if (this.state.totalSec > 0) {
+	        var _state = this.state;
+	        var totalSec = _state.totalSec;
+	        var countStatus = _state.countStatus;
+	
+	        if (totalSec > 0 && countStatus == 'counting') {
+	          //keep ticking
 	          setTimeout(function () {
-	            _this3.setState({ totalSec: _this3.state.totalSec - 1 });
+	            _this3.setTotalSec(totalSec - 1);
 	          }, 1000);
-	        } else {
-	          this.setState({
-	            countStatus: 'stopped'
-	          });
+	        } else if (this.state.countStatus == 'counting') {
+	          this.setCountStatus('stopped');
 	        }
 	      }
 	
@@ -28444,6 +28455,17 @@
 	      }
 	
 	      return setTotalSec;
+	    }()
+	  }, {
+	    key: 'setCountStatus',
+	    value: function () {
+	      function setCountStatus(status) {
+	        this.setState({
+	          countStatus: status
+	        });
+	      }
+	
+	      return setCountStatus;
 	    }()
 	
 	    //----
@@ -28523,13 +28545,14 @@
 	      function onSubmitSec(e) {
 	        e.preventDefault();
 	        var setTotalSec = this.props.setTotalSec;
-	
+	        var setCountStatus = this.props.setCountStatus;
 	        var inputField = this.refs.secField.value;
 	
 	        if (inputField.length > 0 && inputField.match(/^[0-9]*$/)) {
 	          var totalSec = Number(inputField);
 	          this.refs.secField.value = "";
 	          setTotalSec(totalSec);
+	          setCountStatus('counting');
 	        } else {
 	          this.refs.secField.focus();
 	        }
@@ -28542,9 +28565,10 @@
 	  return CountdownForm;
 	}(_react.Component);
 	
-	CountdownForm.propTypes = {
-	  setTotalSec: _react.PropTypes.func.isRequired
-	};
+	// CountdownForm.propTypes = {
+	//   setTotalSec: PropTypes.func,
+	//   setCountStatus: PropTypes.func
+	// }
 	
 	exports['default'] = CountdownForm;
 

@@ -32,7 +32,7 @@ Clock.defaultProps = {
 }
 
 Clock.propTypes = {
-  totalSec: PropTypes.number.isRequired
+  totalSec: PropTypes.number
 }
 
 export default Clock

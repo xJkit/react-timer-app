@@ -6,7 +6,7 @@ import {shallow, mount, render} from 'enzyme'
 //Components
 import Clock from 'Clock'
 
-describe('Component Test: <Clock />', () => {
+describe('<Clock />', () => {
   it('should exist', () => {
     expect(Clock).to.exist
   })

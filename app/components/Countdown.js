@@ -9,7 +9,6 @@ class Countdown extends Component {
 
     this.state = {
       totalSec: 0,
-      countStatus: 'stopped'
     }
   }
 
@@ -19,20 +18,23 @@ class Countdown extends Component {
       <div className="container">
         <h1>Countdown</h1>
         <Clock totalSec={totalSec} />
-        <CountdownForm setTotalSec={(sec) => this.setTotalSec(sec)} />
+        <CountdownForm
+          setTotalSec={(sec) => this.setTotalSec(sec)}
+          setCountStatus={(status) => this.setCountStatus(status)}
+        />
       </div>
     )
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.totalSec > 0){
+    const {totalSec, countStatus} = this.state
+    if (totalSec > 0 && countStatus == 'counting'){
+      //keep ticking
       setTimeout( () => {
-        this.setState({totalSec: this.state.totalSec - 1})
+        this.setTotalSec(totalSec - 1)
       }, 1000)
-    } else {
-      this.setState({
-        countStatus: 'stopped'
-      })
+    } else if(this.state.countStatus == 'counting'){
+      this.setCountStatus('stopped')
     }
   }
 
@@ -40,6 +42,11 @@ class Countdown extends Component {
   setTotalSec(sec) {
     this.setState({
       totalSec: sec
+    })
+  }
+  setCountStatus(status) {
+    this.setState({
+      countStatus: status
     })
   }
 
