@@ -8,7 +8,8 @@ class Countdown extends Component {
     super(props)
 
     this.state = {
-      totalSec: 0
+      totalSec: 0,
+      countStatus: 'stopped'
     }
   }
 
@@ -21,6 +22,18 @@ class Countdown extends Component {
         <CountdownForm setTotalSec={(sec) => this.setTotalSec(sec)} />
       </div>
     )
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.totalSec > 0){
+      setTimeout( () => {
+        this.setState({totalSec: this.state.totalSec - 1})
+      }, 1000)
+    } else {
+      this.setState({
+        countStatus: 'stopped'
+      })
+    }
   }
 
   //---helper functions

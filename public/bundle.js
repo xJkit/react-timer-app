@@ -59,7 +59,7 @@
   \*******************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(/*! !./~/script-loader/addScript.js */ 2)(__webpack_require__(/*! !./~/raw-loader!./~/jquery/dist/jquery.min.js */ 3)+"\n\n// SCRIPT-LOADER FOOTER\n//# sourceURL=script:///Users/JoeyChung/Desktop/react-timer/node_modules/jquery/dist/jquery.min.js")
+	__webpack_require__(/*! !./~/script-loader/addScript.js */ 2)(__webpack_require__(/*! !./~/raw-loader!./~/jquery/dist/jquery.min.js */ 3)+"\n\n// SCRIPT-LOADER FOOTER\n//# sourceURL=script:///Users/joey54780/Desktop/react-timer-app/node_modules/jquery/dist/jquery.min.js")
 
 /***/ },
 /* 2 */
@@ -95,7 +95,7 @@
   \*********************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(/*! !./~/script-loader/addScript.js */ 2)(__webpack_require__(/*! !./~/raw-loader!./~/foundation-sites/dist/foundation.min.js */ 5)+"\n\n// SCRIPT-LOADER FOOTER\n//# sourceURL=script:///Users/JoeyChung/Desktop/react-timer/node_modules/foundation-sites/dist/foundation.min.js")
+	__webpack_require__(/*! !./~/script-loader/addScript.js */ 2)(__webpack_require__(/*! !./~/raw-loader!./~/foundation-sites/dist/foundation.min.js */ 5)+"\n\n// SCRIPT-LOADER FOOTER\n//# sourceURL=script:///Users/joey54780/Desktop/react-timer-app/node_modules/foundation-sites/dist/foundation.min.js")
 
 /***/ },
 /* 5 */
@@ -28377,7 +28377,8 @@
 	    var _this = _possibleConstructorReturn(this, (Countdown.__proto__ || Object.getPrototypeOf(Countdown)).call(this, props));
 	
 	    _this.state = {
-	      totalSec: 0
+	      totalSec: 0,
+	      countStatus: 'stopped'
 	    };
 	    return _this;
 	  }
@@ -28410,6 +28411,25 @@
 	      }
 	
 	      return render;
+	    }()
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function () {
+	      function componentDidUpdate(prevProps, prevState) {
+	        var _this3 = this;
+	
+	        if (this.state.totalSec > 0) {
+	          setTimeout(function () {
+	            _this3.setState({ totalSec: _this3.state.totalSec - 1 });
+	          }, 1000);
+	        } else {
+	          this.setState({
+	            countStatus: 'stopped'
+	          });
+	        }
+	      }
+	
+	      return componentDidUpdate;
 	    }()
 	
 	    //---helper functions
