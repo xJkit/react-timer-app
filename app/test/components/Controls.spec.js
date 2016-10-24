@@ -9,14 +9,17 @@ describe('<Controls />', () => {
     expect(Controls).toExist
   })
 
-  it('should render start button', () => {
-    const controlsWrapper = shallow(<Controls countStatus="paused" />)
-    expect(controlsWrapper.find('button').length).toBe(2)
-    expect(controlsWrapper.find('button').first().text()).toBe('Start')
+  describe('render', () => {
+    it('should render start button when countStatus is paused', () => {
+      const controlsWrapper = shallow(<Controls countStatus="paused" />)
+      expect(controlsWrapper.find('button').length).toBe(2)
+      expect(controlsWrapper.find('button').first().text()).toBe('Start')
+    })
+    it('should render pause button when countStatus is counting', () => {
+      const controlsWrapper = shallow(<Controls countStatus="counting" />)
+      expect(controlsWrapper.find('button').length).toBe(2)
+      expect(controlsWrapper.find('button').first().text()).toBe('Pause')
+    })
   })
-  it('should render pause button', () => {
-    const controlsWrapper = shallow(<Controls countStatus="counting" />)
-    expect(controlsWrapper.find('button').length).toBe(2)
-    expect(controlsWrapper.find('button').first().text()).toBe('Pause')
-  })
+
 })

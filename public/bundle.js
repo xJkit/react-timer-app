@@ -127,7 +127,7 @@
 	
 	var _routes2 = _interopRequireDefault(_routes);
 	
-	__webpack_require__(/*! style!css!sass!applicationStyles */ 252);
+	__webpack_require__(/*! style!css!sass!applicationStyles */ 251);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
@@ -22056,15 +22056,15 @@
 	
 	var _Timer2 = _interopRequireDefault(_Timer);
 	
-	var _Countdown = __webpack_require__(/*! Countdown */ 248);
+	var _Countdown = __webpack_require__(/*! Countdown */ 247);
 	
 	var _Countdown2 = _interopRequireDefault(_Countdown);
 	
-	var _About = __webpack_require__(/*! About */ 250);
+	var _About = __webpack_require__(/*! About */ 249);
 	
 	var _About2 = _interopRequireDefault(_About);
 	
-	var _NotFound = __webpack_require__(/*! NotFound */ 251);
+	var _NotFound = __webpack_require__(/*! NotFound */ 250);
 	
 	var _NotFound2 = _interopRequireDefault(_NotFound);
 	
@@ -28241,8 +28241,7 @@
 	exports["default"] = Clock;
 
 /***/ },
-/* 247 */,
-/* 248 */
+/* 247 */
 /*!*************************************!*\
   !*** ./app/components/Countdown.js ***!
   \*************************************/
@@ -28264,9 +28263,13 @@
 	
 	var _Clock2 = _interopRequireDefault(_Clock);
 	
-	var _CountdownForm = __webpack_require__(/*! CountdownForm */ 249);
+	var _CountdownForm = __webpack_require__(/*! CountdownForm */ 248);
 	
 	var _CountdownForm2 = _interopRequireDefault(_CountdownForm);
+	
+	var _Controls = __webpack_require__(/*! Controls */ 255);
+	
+	var _Controls2 = _interopRequireDefault(_Controls);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
@@ -28287,18 +28290,36 @@
 	    var _this = _possibleConstructorReturn(this, (Countdown.__proto__ || Object.getPrototypeOf(Countdown)).call(this, props));
 	
 	    _this.state = {
-	      totalSec: 0
+	      totalSec: 0,
+	      countStatus: 'stopped'
 	    };
 	    return _this;
 	  }
 	
 	  _createClass(Countdown, [{
+	    key: 'shouldComponentUpdate',
+	    value: function () {
+	      function shouldComponentUpdate(nextProps, nextState) {
+	        if (nextState.countStatus == 'paused') {
+	          clearTimeout(this.timer);
+	          return true;
+	        } else if (nextState.countStatus == 'stopped') {
+	          nextState.totalSec = 0;
+	          return true;
+	        } else {
+	          return true;
+	        }
+	      }
+	
+	      return shouldComponentUpdate;
+	    }()
+	  }, {
 	    key: 'render',
 	    value: function () {
 	      function render() {
-	        var _this2 = this;
-	
-	        var totalSec = this.state.totalSec;
+	        var _state = this.state;
+	        var totalSec = _state.totalSec;
+	        var countStatus = _state.countStatus;
 	
 	        return _react2['default'].createElement(
 	          'div',
@@ -28309,22 +28330,7 @@
 	            'Countdown'
 	          ),
 	          _react2['default'].createElement(_Clock2['default'], { totalSec: totalSec }),
-	          _react2['default'].createElement(_CountdownForm2['default'], {
-	            setTotalSec: function () {
-	              function setTotalSec(sec) {
-	                return _this2.setTotalSec(sec);
-	              }
-	
-	              return setTotalSec;
-	            }(),
-	            setCountStatus: function () {
-	              function setCountStatus(status) {
-	                return _this2.setCountStatus(status);
-	              }
-	
-	              return setCountStatus;
-	            }()
-	          })
+	          this.renderControlArea(countStatus)
 	        );
 	      }
 	
@@ -28334,16 +28340,16 @@
 	    key: 'componentDidUpdate',
 	    value: function () {
 	      function componentDidUpdate(prevProps, prevState) {
-	        var _this3 = this;
+	        var _this2 = this;
 	
-	        var _state = this.state;
-	        var totalSec = _state.totalSec;
-	        var countStatus = _state.countStatus;
+	        var _state2 = this.state;
+	        var totalSec = _state2.totalSec;
+	        var countStatus = _state2.countStatus;
 	
 	        if (totalSec > 0 && countStatus == 'counting') {
 	          //keep ticking
-	          setTimeout(function () {
-	            _this3.setTotalSec(totalSec - 1);
+	          this.timer = setTimeout(function () {
+	            _this2.setTotalSec(totalSec - 1);
 	          }, 1000);
 	        } else if (this.state.countStatus == 'counting') {
 	          this.setCountStatus('stopped');
@@ -28377,6 +28383,45 @@
 	
 	      return setCountStatus;
 	    }()
+	  }, {
+	    key: 'renderControlArea',
+	    value: function () {
+	      function renderControlArea(status) {
+	        var _this3 = this;
+	
+	        if (status !== 'stopped') {
+	          return _react2['default'].createElement(_Controls2['default'], {
+	            countStatus: this.state.countStatus,
+	            setCountStatus: function () {
+	              function setCountStatus(status) {
+	                return _this3.setCountStatus(status);
+	              }
+	
+	              return setCountStatus;
+	            }()
+	          });
+	        } else {
+	          return _react2['default'].createElement(_CountdownForm2['default'], {
+	            setTotalSec: function () {
+	              function setTotalSec(sec) {
+	                return _this3.setTotalSec(sec);
+	              }
+	
+	              return setTotalSec;
+	            }(),
+	            setCountStatus: function () {
+	              function setCountStatus(status) {
+	                return _this3.setCountStatus(status);
+	              }
+	
+	              return setCountStatus;
+	            }()
+	          });
+	        }
+	      }
+	
+	      return renderControlArea;
+	    }()
 	
 	    //----
 	
@@ -28388,7 +28433,7 @@
 	exports['default'] = Countdown;
 
 /***/ },
-/* 249 */
+/* 248 */
 /*!*****************************************!*\
   !*** ./app/components/CountdownForm.js ***!
   \*****************************************/
@@ -28483,7 +28528,7 @@
 	exports['default'] = CountdownForm;
 
 /***/ },
-/* 250 */
+/* 249 */
 /*!*********************************!*\
   !*** ./app/components/About.js ***!
   \*********************************/
@@ -28526,7 +28571,7 @@
 	exports["default"] = About;
 
 /***/ },
-/* 251 */
+/* 250 */
 /*!************************************!*\
   !*** ./app/components/NotFound.js ***!
   \************************************/
@@ -28555,7 +28600,7 @@
 	exports['default'] = NotFound;
 
 /***/ },
-/* 252 */
+/* 251 */
 /*!*****************************************************************************!*\
   !*** ./~/style-loader!./~/css-loader!./~/sass-loader!./app/styles/app.scss ***!
   \*****************************************************************************/
@@ -28564,10 +28609,10 @@
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../~/css-loader!./../../~/sass-loader!./app.scss */ 253);
+	var content = __webpack_require__(/*! !./../../~/css-loader!./../../~/sass-loader!./app.scss */ 252);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(/*! ./../../~/style-loader/addStyles.js */ 255)(content, {});
+	var update = __webpack_require__(/*! ./../../~/style-loader/addStyles.js */ 254)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -28584,13 +28629,13 @@
 	}
 
 /***/ },
-/* 253 */
+/* 252 */
 /*!************************************************************!*\
   !*** ./~/css-loader!./~/sass-loader!./app/styles/app.scss ***!
   \************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(/*! ./../../~/css-loader/lib/css-base.js */ 254)();
+	exports = module.exports = __webpack_require__(/*! ./../../~/css-loader/lib/css-base.js */ 253)();
 	// imports
 	
 	
@@ -28601,7 +28646,7 @@
 
 
 /***/ },
-/* 254 */
+/* 253 */
 /*!**************************************!*\
   !*** ./~/css-loader/lib/css-base.js ***!
   \**************************************/
@@ -28660,7 +28705,7 @@
 
 
 /***/ },
-/* 255 */
+/* 254 */
 /*!*************************************!*\
   !*** ./~/style-loader/addStyles.js ***!
   \*************************************/
@@ -28913,6 +28958,90 @@
 			URL.revokeObjectURL(oldSrc);
 	}
 
+
+/***/ },
+/* 255 */
+/*!************************************!*\
+  !*** ./app/components/Controls.js ***!
+  \************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
+	var Controls = function Controls(props) {
+	  var countStatus = props.countStatus;
+	  var setCountStatus = props.setCountStatus;
+	
+	  var renderStartStopBtn = function renderStartStopBtn() {
+	    if (countStatus == 'counting') {
+	      return _react2['default'].createElement(
+	        'div',
+	        { className: 'button-group' },
+	        _react2['default'].createElement(
+	          'button',
+	          { className: 'button alert', onClick: function () {
+	              function onClick(e) {
+	                return setCountStatus('paused');
+	              }
+	
+	              return onClick;
+	            }() },
+	          'Pause'
+	        )
+	      );
+	    } else if (countStatus == 'paused') {
+	      return _react2['default'].createElement(
+	        'div',
+	        { className: 'button-group' },
+	        _react2['default'].createElement(
+	          'button',
+	          { className: 'button primary', onClick: function () {
+	              function onClick(e) {
+	                return setCountStatus('counting');
+	              }
+	
+	              return onClick;
+	            }() },
+	          'Start'
+	        )
+	      );
+	    }
+	  };
+	
+	  return _react2['default'].createElement(
+	    'div',
+	    { className: 'controls' },
+	    renderStartStopBtn(),
+	    _react2['default'].createElement(
+	      'button',
+	      { className: 'button hollow primary', onClick: function () {
+	          function onClick(e) {
+	            return setCountStatus('stopped');
+	          }
+	
+	          return onClick;
+	        }() },
+	      'Clear'
+	    )
+	  );
+	};
+	
+	Controls.propTypes = {
+	  countStatus: _react.PropTypes.string,
+	  setCountStatus: _react.PropTypes.func
+	};
+	
+	exports['default'] = Controls;
 
 /***/ }
 /******/ ]);

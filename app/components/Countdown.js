@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 //Components
 import Clock from 'Clock'
 import CountdownForm from 'CountdownForm'
+import Controls from 'Controls'
 
 class Countdown extends Component {
   constructor(props){
@@ -9,19 +10,29 @@ class Countdown extends Component {
 
     this.state = {
       totalSec: 0,
+      countStatus: 'stopped'
+    }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextState.countStatus == 'paused') {
+      clearTimeout(this.timer)
+      return true
+    } else  if (nextState.countStatus == 'stopped'){
+      nextState.totalSec = 0
+      return true
+    } else {
+      return true
     }
   }
 
   render() {
-    const {totalSec} = this.state
+    const {totalSec, countStatus} = this.state
     return (
       <div className="container">
         <h1>Countdown</h1>
         <Clock totalSec={totalSec} />
-        <CountdownForm
-          setTotalSec={(sec) => this.setTotalSec(sec)}
-          setCountStatus={(status) => this.setCountStatus(status)}
-        />
+        {this.renderControlArea(countStatus)}
       </div>
     )
   }
@@ -30,7 +41,7 @@ class Countdown extends Component {
     const {totalSec, countStatus} = this.state
     if (totalSec > 0 && countStatus == 'counting'){
       //keep ticking
-      setTimeout( () => {
+      this.timer = setTimeout( () => {
         this.setTotalSec(totalSec - 1)
       }, 1000)
     } else if(this.state.countStatus == 'counting'){
@@ -48,6 +59,24 @@ class Countdown extends Component {
     this.setState({
       countStatus: status
     })
+  }
+
+  renderControlArea(status) {
+    if (status !== 'stopped') {
+      return (
+        <Controls
+          countStatus={this.state.countStatus}
+          setCountStatus={(status) => this.setCountStatus(status)}
+        />
+      )
+    } else {
+      return (
+        <CountdownForm
+          setTotalSec={(sec) => this.setTotalSec(sec)}
+          setCountStatus={(status) => this.setCountStatus(status)}
+        />
+      )
+    }
   }
 
 
