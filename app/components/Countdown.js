@@ -31,7 +31,7 @@ class Countdown extends Component {
     return (
       <div className="container">
         <h1>Countdown</h1>
-        <Clock totalSec={totalSec} />
+        <Clock totalSec={totalSec} countStatus={countStatus}/>
         {this.renderControlArea(countStatus)}
       </div>
     )

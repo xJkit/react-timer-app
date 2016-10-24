@@ -127,7 +127,7 @@
 	
 	var _routes2 = _interopRequireDefault(_routes);
 	
-	__webpack_require__(/*! style!css!sass!applicationStyles */ 251);
+	__webpack_require__(/*! style!css!sass!applicationStyles */ 252);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
@@ -22060,11 +22060,11 @@
 	
 	var _Countdown2 = _interopRequireDefault(_Countdown);
 	
-	var _About = __webpack_require__(/*! About */ 249);
+	var _About = __webpack_require__(/*! About */ 250);
 	
 	var _About2 = _interopRequireDefault(_About);
 	
-	var _NotFound = __webpack_require__(/*! NotFound */ 250);
+	var _NotFound = __webpack_require__(/*! NotFound */ 251);
 	
 	var _NotFound2 = _interopRequireDefault(_NotFound);
 	
@@ -28186,7 +28186,7 @@
   \*********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -28196,10 +28196,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
 	var Clock = function Clock(props) {
 	  var totalSec = props.totalSec;
+	  var countStatus = props.countStatus;
 	  //------- helper functions
 	
 	  var formatSeconds = function formatSeconds(totalSeconds) {
@@ -28207,38 +28208,56 @@
 	    var min = Math.floor(totalSeconds / 60);
 	    // check for less than 10
 	    if (sec < 10) {
-	      sec = "0" + sec;
+	      sec = '0' + sec;
 	    }
 	
 	    if (min < 10) {
-	      min = "0" + min;
+	      min = '0' + min;
 	    }
 	
-	    return String(min) + ":" + String(sec);
+	    return String(min) + ':' + String(sec);
+	  };
+	
+	  var renderClock = function renderClock() {
+	    if (countStatus == 'stopped') {
+	      return _react2['default'].createElement(
+	        'div',
+	        { className: 'clock primary' },
+	        _react2['default'].createElement(
+	          'span',
+	          { className: 'sec' },
+	          formatSeconds(totalSec)
+	        )
+	      );
+	    } else {
+	      return _react2['default'].createElement(
+	        'div',
+	        { className: 'clock alert' },
+	        _react2['default'].createElement(
+	          'span',
+	          { className: 'sec' },
+	          formatSeconds(totalSec)
+	        )
+	      );
+	    }
 	  };
 	  // --------
 	
-	  return _react2["default"].createElement(
-	    "div",
-	    { className: "clock primary" },
-	    _react2["default"].createElement(
-	      "span",
-	      { className: "sec" },
-	      formatSeconds(totalSec)
-	    )
-	  );
+	  return renderClock();
 	};
 	
 	//checks
 	Clock.defaultProps = {
-	  totalSec: 0
+	  totalSec: 0,
+	  countStatus: 'stopped'
 	};
 	
 	Clock.propTypes = {
-	  totalSec: _react.PropTypes.number
+	  totalSec: _react.PropTypes.number,
+	  countStatus: _react.PropTypes.string
 	};
 	
-	exports["default"] = Clock;
+	exports['default'] = Clock;
 
 /***/ },
 /* 247 */
@@ -28267,7 +28286,7 @@
 	
 	var _CountdownForm2 = _interopRequireDefault(_CountdownForm);
 	
-	var _Controls = __webpack_require__(/*! Controls */ 255);
+	var _Controls = __webpack_require__(/*! Controls */ 249);
 	
 	var _Controls2 = _interopRequireDefault(_Controls);
 	
@@ -28329,7 +28348,7 @@
 	            null,
 	            'Countdown'
 	          ),
-	          _react2['default'].createElement(_Clock2['default'], { totalSec: totalSec }),
+	          _react2['default'].createElement(_Clock2['default'], { totalSec: totalSec, countStatus: countStatus }),
 	          this.renderControlArea(countStatus)
 	        );
 	      }
@@ -28542,6 +28561,90 @@
 
 /***/ },
 /* 249 */
+/*!************************************!*\
+  !*** ./app/components/Controls.js ***!
+  \************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
+	var Controls = function Controls(props) {
+	  var countStatus = props.countStatus;
+	  var setCountStatus = props.setCountStatus;
+	
+	  var renderStartStopBtn = function renderStartStopBtn() {
+	    if (countStatus == 'counting') {
+	      return _react2['default'].createElement(
+	        'div',
+	        { className: 'button-group' },
+	        _react2['default'].createElement(
+	          'button',
+	          { className: 'button alert pause', onClick: function () {
+	              function onClick(e) {
+	                return setCountStatus('paused');
+	              }
+	
+	              return onClick;
+	            }() },
+	          'Pause'
+	        )
+	      );
+	    } else if (countStatus == 'paused') {
+	      return _react2['default'].createElement(
+	        'div',
+	        { className: 'button-group' },
+	        _react2['default'].createElement(
+	          'button',
+	          { className: 'button primary start', onClick: function () {
+	              function onClick(e) {
+	                return setCountStatus('counting');
+	              }
+	
+	              return onClick;
+	            }() },
+	          'Start'
+	        )
+	      );
+	    }
+	  };
+	
+	  return _react2['default'].createElement(
+	    'div',
+	    { className: 'controls' },
+	    renderStartStopBtn(),
+	    _react2['default'].createElement(
+	      'button',
+	      { className: 'button hollow primary clear', onClick: function () {
+	          function onClick(e) {
+	            return setCountStatus('stopped');
+	          }
+	
+	          return onClick;
+	        }() },
+	      'Clear'
+	    )
+	  );
+	};
+	
+	Controls.propTypes = {
+	  countStatus: _react.PropTypes.string,
+	  setCountStatus: _react.PropTypes.func
+	};
+	
+	exports['default'] = Controls;
+
+/***/ },
+/* 250 */
 /*!*********************************!*\
   !*** ./app/components/About.js ***!
   \*********************************/
@@ -28584,7 +28687,7 @@
 	exports["default"] = About;
 
 /***/ },
-/* 250 */
+/* 251 */
 /*!************************************!*\
   !*** ./app/components/NotFound.js ***!
   \************************************/
@@ -28613,7 +28716,7 @@
 	exports['default'] = NotFound;
 
 /***/ },
-/* 251 */
+/* 252 */
 /*!*****************************************************************************!*\
   !*** ./~/style-loader!./~/css-loader!./~/sass-loader!./app/styles/app.scss ***!
   \*****************************************************************************/
@@ -28622,10 +28725,10 @@
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../~/css-loader!./../../~/sass-loader!./app.scss */ 252);
+	var content = __webpack_require__(/*! !./../../~/css-loader!./../../~/sass-loader!./app.scss */ 253);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(/*! ./../../~/style-loader/addStyles.js */ 254)(content, {});
+	var update = __webpack_require__(/*! ./../../~/style-loader/addStyles.js */ 255)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -28642,13 +28745,13 @@
 	}
 
 /***/ },
-/* 252 */
+/* 253 */
 /*!************************************************************!*\
   !*** ./~/css-loader!./~/sass-loader!./app/styles/app.scss ***!
   \************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(/*! ./../../~/css-loader/lib/css-base.js */ 253)();
+	exports = module.exports = __webpack_require__(/*! ./../../~/css-loader/lib/css-base.js */ 254)();
 	// imports
 	
 	
@@ -28659,7 +28762,7 @@
 
 
 /***/ },
-/* 253 */
+/* 254 */
 /*!**************************************!*\
   !*** ./~/css-loader/lib/css-base.js ***!
   \**************************************/
@@ -28718,7 +28821,7 @@
 
 
 /***/ },
-/* 254 */
+/* 255 */
 /*!*************************************!*\
   !*** ./~/style-loader/addStyles.js ***!
   \*************************************/
@@ -28971,90 +29074,6 @@
 			URL.revokeObjectURL(oldSrc);
 	}
 
-
-/***/ },
-/* 255 */
-/*!************************************!*\
-  !*** ./app/components/Controls.js ***!
-  \************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(/*! react */ 8);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	var Controls = function Controls(props) {
-	  var countStatus = props.countStatus;
-	  var setCountStatus = props.setCountStatus;
-	
-	  var renderStartStopBtn = function renderStartStopBtn() {
-	    if (countStatus == 'counting') {
-	      return _react2['default'].createElement(
-	        'div',
-	        { className: 'button-group' },
-	        _react2['default'].createElement(
-	          'button',
-	          { className: 'button alert pause', onClick: function () {
-	              function onClick(e) {
-	                return setCountStatus('paused');
-	              }
-	
-	              return onClick;
-	            }() },
-	          'Pause'
-	        )
-	      );
-	    } else if (countStatus == 'paused') {
-	      return _react2['default'].createElement(
-	        'div',
-	        { className: 'button-group' },
-	        _react2['default'].createElement(
-	          'button',
-	          { className: 'button primary start', onClick: function () {
-	              function onClick(e) {
-	                return setCountStatus('counting');
-	              }
-	
-	              return onClick;
-	            }() },
-	          'Start'
-	        )
-	      );
-	    }
-	  };
-	
-	  return _react2['default'].createElement(
-	    'div',
-	    { className: 'controls' },
-	    renderStartStopBtn(),
-	    _react2['default'].createElement(
-	      'button',
-	      { className: 'button hollow primary clear', onClick: function () {
-	          function onClick(e) {
-	            return setCountStatus('stopped');
-	          }
-	
-	          return onClick;
-	        }() },
-	      'Clear'
-	    )
-	  );
-	};
-	
-	Controls.propTypes = {
-	  countStatus: _react.PropTypes.string,
-	  setCountStatus: _react.PropTypes.func
-	};
-	
-	exports['default'] = Controls;
 
 /***/ }
 /******/ ]);

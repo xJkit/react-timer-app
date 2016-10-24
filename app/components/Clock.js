@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react'
 
 const Clock = (props) => {
-  const {totalSec} = props
+  const {totalSec, countStatus} = props
   //------- helper functions
   const formatSeconds = (totalSeconds) => {
     let sec = totalSeconds % 60
@@ -17,22 +17,39 @@ const Clock = (props) => {
 
     return `${min}:${sec}`
   }
+
+
+  const renderClock = () => {
+    if(countStatus == 'stopped'){
+      return(
+        <div className="clock primary">
+          <span className="sec">{formatSeconds(totalSec)}</span>
+        </div>
+      )
+    } else {
+      return(
+        <div className="clock alert">
+          <span className="sec">{formatSeconds(totalSec)}</span>
+        </div>
+      )
+    }
+  }
   // --------
 
   return(
-    <div className="clock primary">
-      <span className="sec">{formatSeconds(totalSec)}</span>
-    </div>
+    renderClock()
   )
 }
 
 //checks
 Clock.defaultProps = {
-  totalSec: 0
+  totalSec: 0,
+  countStatus: 'stopped'
 }
 
 Clock.propTypes = {
-  totalSec: PropTypes.number
+  totalSec: PropTypes.number,
+  countStatus: PropTypes.string
 }
 
 export default Clock
