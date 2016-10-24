@@ -1,0 +1,15 @@
+.controls {
+  display: flex;
+  justify-content: center;
+  button {
+    padding: 1.2rem;
+    &.start, &.pause{
+      padding-left: 2rem;
+      border-radius: 25px 0 0 25px;
+    }
+    &.clear {
+      padding-right: 2rem;
+      border-radius: 0 25px 25px 0;
+    }
+  }
+}

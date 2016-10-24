@@ -6,7 +6,7 @@ const Controls = (props) => {
     if (countStatus == 'counting'){
       return(
         <div className="button-group">
-          <button className="button alert" onClick={(e) => setCountStatus('paused')}>
+          <button className="button alert pause" onClick={(e) => setCountStatus('paused')}>
             Pause
           </button>
         </div>
@@ -14,7 +14,7 @@ const Controls = (props) => {
     } else if (countStatus == 'paused'){
       return (
         <div className="button-group">
-          <button className="button primary" onClick={(e) => setCountStatus('counting')}>
+          <button className="button primary start" onClick={(e) => setCountStatus('counting')}>
             Start
           </button>
         </div>
@@ -25,7 +25,7 @@ const Controls = (props) => {
   return (
     <div className="controls">
       {renderStartStopBtn()}
-      <button className="button hollow primary" onClick={(e) => setCountStatus('stopped')}>Clear</button>
+      <button className="button hollow primary clear" onClick={(e) => setCountStatus('stopped')}>Clear</button>
     </div>
   )
 }
