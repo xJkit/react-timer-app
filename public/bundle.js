@@ -28358,6 +28358,19 @@
 	
 	      return componentDidUpdate;
 	    }()
+	    // componentWillMount() {
+	    //   console.log('countdown component will mount')
+	    // }
+	
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function () {
+	      function componentWillUnmount() {
+	        clearTimeout(this.timer);
+	      }
+	
+	      return componentWillUnmount;
+	    }()
 	
 	    //---helper functions
 	

@@ -48,6 +48,12 @@ class Countdown extends Component {
       this.setCountStatus('stopped')
     }
   }
+  // componentWillMount() {
+  //   console.log('countdown component will mount')
+  // }
+  componentWillUnmount() {
+    clearTimeout(this.timer)
+  }
 
   //---helper functions
   setTotalSec(sec) {
