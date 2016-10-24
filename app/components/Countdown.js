@@ -29,7 +29,7 @@ class Countdown extends Component {
   render() {
     const {totalSec, countStatus} = this.state
     return (
-      <div className="container">
+      <div className="countdown">
         <h1>Countdown</h1>
         <Clock totalSec={totalSec} countStatus={countStatus}/>
         {this.renderControlArea(countStatus)}

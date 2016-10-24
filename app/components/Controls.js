@@ -11,7 +11,7 @@ const Controls = (props) => {
           </button>
         </div>
       )
-    } else if (countStatus == 'paused'){
+    } else {
       return (
         <div className="button-group">
           <button className="button primary start" onClick={(e) => setCountStatus('counting')}>
