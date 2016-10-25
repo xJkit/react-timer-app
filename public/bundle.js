@@ -28194,38 +28194,6 @@
 	  }
 	
 	  _createClass(Timer, [{
-	    key: 'render',
-	    value: function () {
-	      function render() {
-	        var _this2 = this;
-	
-	        var _state = this.state;
-	        var totalSec = _state.totalSec;
-	        var countStatus = _state.countStatus;
-	
-	
-	        return _react2['default'].createElement(
-	          'div',
-	          { className: 'timer' },
-	          _react2['default'].createElement(
-	            'h1',
-	            null,
-	            'Timer'
-	          ),
-	          _react2['default'].createElement(_Clock2['default'], { totalSec: totalSec, countStatus: countStatus }),
-	          _react2['default'].createElement(_Controls2['default'], { countStatus: countStatus, setCountStatus: function () {
-	              function setCountStatus(status) {
-	                return _this2.setCountStatus(status);
-	              }
-	
-	              return setCountStatus;
-	            }() })
-	        );
-	      }
-	
-	      return render;
-	    }()
-	  }, {
 	    key: 'shouldComponentUpdate',
 	    value: function () {
 	      function shouldComponentUpdate(nextProps, nextState) {
@@ -28246,12 +28214,12 @@
 	    key: 'componentDidUpdate',
 	    value: function () {
 	      function componentDidUpdate(prevProps, prevState) {
-	        var _this3 = this;
+	        var _this2 = this;
 	
 	        if (this.state.countStatus == 'counting') {
 	          this.timer = setTimeout(function () {
-	            _this3.setState({
-	              totalSec: _this3.state.totalSec + 1
+	            _this2.setState({
+	              totalSec: _this2.state.totalSec + 1
 	            });
 	          }, 1000);
 	        }
@@ -28279,6 +28247,38 @@
 	      }
 	
 	      return setCountStatus;
+	    }()
+	  }, {
+	    key: 'render',
+	    value: function () {
+	      function render() {
+	        var _this3 = this;
+	
+	        var _state = this.state;
+	        var totalSec = _state.totalSec;
+	        var countStatus = _state.countStatus;
+	
+	
+	        return _react2['default'].createElement(
+	          'div',
+	          { className: 'timer' },
+	          _react2['default'].createElement(
+	            'h1',
+	            null,
+	            'Timer'
+	          ),
+	          _react2['default'].createElement(_Clock2['default'], { totalSec: totalSec, countStatus: countStatus }),
+	          _react2['default'].createElement(_Controls2['default'], { countStatus: countStatus, setCountStatus: function () {
+	              function setCountStatus(status) {
+	                return _this3.setCountStatus(status);
+	              }
+	
+	              return setCountStatus;
+	            }() })
+	        );
+	      }
+	
+	      return render;
 	    }()
 	  }]);
 	

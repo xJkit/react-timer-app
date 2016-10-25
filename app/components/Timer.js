@@ -13,18 +13,6 @@ class Timer extends Component {
     }
   }
 
-  render() {
-    const {totalSec, countStatus} = this.state
-
-    return(
-      <div className="timer">
-        <h1>Timer</h1>
-        <Clock totalSec={totalSec} countStatus={countStatus}/>
-        <Controls countStatus={countStatus} setCountStatus={(status) => this.setCountStatus(status)}/>
-      </div>
-    )
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
     if (nextState.countStatus == 'paused') {
       clearTimeout(this.timer)
@@ -59,6 +47,17 @@ class Timer extends Component {
     })
   }
 
+  render() {
+    const {totalSec, countStatus} = this.state
+
+    return(
+      <div className="timer">
+        <h1>Timer</h1>
+        <Clock totalSec={totalSec} countStatus={countStatus}/>
+        <Controls countStatus={countStatus} setCountStatus={(status) => this.setCountStatus(status)}/>
+      </div>
+    )
+  }
 
 }
 
