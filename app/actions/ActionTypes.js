@@ -1,0 +1,7 @@
+// Timer
+export const SET_TIMER_STATUS = 'SET_TIMER_STATUS';
+export const SET_TIMER_SEC = 'SET_TIMER_SEC';
+
+//Countdown
+export const SET_COUNTDOWN_STATUS = 'SET_COUNTDOWN_STATUS';
+export const SET_COUNTDOWN_SEC = 'SET_COUNTDOWN_SEC';

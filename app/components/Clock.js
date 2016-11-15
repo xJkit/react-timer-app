@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react'
 
 const Clock = (props) => {
+
   const {totalSec, countStatus} = props
   //------- helper functions
   const formatSeconds = (totalSeconds) => {
@@ -41,15 +42,16 @@ const Clock = (props) => {
   )
 }
 
+Clock.propTypes = {
+  totalSec: PropTypes.number,
+  countStatus: PropTypes.string
+};
+
 //checks
 Clock.defaultProps = {
   totalSec: 0,
   countStatus: 'stopped'
 }
 
-Clock.propTypes = {
-  totalSec: PropTypes.number,
-  countStatus: PropTypes.string
-}
 
 export default Clock

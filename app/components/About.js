@@ -1,6 +1,6 @@
 import React from 'react'
 
-const About = (props) => (
+const About = () => (
   <div className="about">
     <h1>關於作者</h1>
     <h6 className="center">鍾曜年 Jay Chung</h6>
