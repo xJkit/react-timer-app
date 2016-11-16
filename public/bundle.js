@@ -28181,6 +28181,8 @@
 	    value: function () {
 	      function componentWillUnmount() {
 	        clearTimeout(this.timer);
+	        this.props.setTimerStatus('stopped');
+	        this.props.setTimerSec(0);
 	      }
 	
 	      return componentWillUnmount;
@@ -30336,6 +30338,8 @@
 	    value: function () {
 	      function componentWillUnmount() {
 	        clearTimeout(this.timer);
+	        this.props.setCountdownSec(0);
+	        this.props.setCountdownStatus('stopped');
 	      }
 	
 	      return componentWillUnmount;

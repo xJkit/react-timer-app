@@ -57,6 +57,8 @@ class Countdown extends Component {
   // }
   componentWillUnmount() {
     clearTimeout(this.timer)
+    this.props.setCountdownSec(0)
+    this.props.setCountdownStatus('stopped')
   }
 
   //---helper functions

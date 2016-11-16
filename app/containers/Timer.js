@@ -42,6 +42,8 @@ class Timer extends Component {
 
   componentWillUnmount() {
     clearTimeout(this.timer)
+    this.props.setTimerStatus('stopped')
+    this.props.setTimerSec(0)
   }
 
 
