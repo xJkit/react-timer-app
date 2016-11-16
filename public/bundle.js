@@ -30216,6 +30216,12 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _reactRedux = __webpack_require__(/*! react-redux */ 246);
+	
+	var _actions = __webpack_require__(/*! ../actions */ 274);
+	
+	var actions = _interopRequireWildcard(_actions);
+	
 	var _Clock = __webpack_require__(/*! Clock */ 276);
 	
 	var _Clock2 = _interopRequireDefault(_Clock);
@@ -30227,6 +30233,8 @@
 	var _Controls = __webpack_require__(/*! Controls */ 277);
 	
 	var _Controls2 = _interopRequireDefault(_Controls);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
@@ -30241,30 +30249,34 @@
 	var Countdown = function (_Component) {
 	  _inherits(Countdown, _Component);
 	
-	  function Countdown(props) {
+	  function Countdown() {
 	    _classCallCheck(this, Countdown);
 	
-	    var _this = _possibleConstructorReturn(this, (Countdown.__proto__ || Object.getPrototypeOf(Countdown)).call(this, props));
-	
-	    _this.state = {
-	      totalSec: 0,
-	      countStatus: 'stopped'
-	    };
-	    return _this;
+	    return _possibleConstructorReturn(this, (Countdown.__proto__ || Object.getPrototypeOf(Countdown)).apply(this, arguments));
 	  }
 	
 	  _createClass(Countdown, [{
 	    key: 'shouldComponentUpdate',
 	    value: function () {
 	      function shouldComponentUpdate(nextProps, nextState) {
-	        if (nextState.countStatus == 'paused') {
-	          clearTimeout(this.timer);
-	          return true;
-	        } else if (nextState.countStatus == 'stopped') {
-	          nextState.totalSec = 0;
-	          return true;
-	        } else {
-	          return true;
+	        // if (nextState.countStatus == 'paused') {
+	        //   clearTimeout(this.timer)
+	        //   return true
+	        // } else  if (nextState.countStatus == 'stopped'){
+	        //   nextState.totalSec = 0
+	        //   return true
+	        // } else {
+	        //   return true
+	        // }
+	        switch (nextProps.countStatus) {
+	          case 'paused':
+	            clearTimeout(this.timer);
+	            return true;
+	          case 'stopped':
+	            this.props.setCountdownSec(0);
+	            return true;
+	          default:
+	            return true;
 	        }
 	      }
 	
@@ -30274,9 +30286,9 @@
 	    key: 'render',
 	    value: function () {
 	      function render() {
-	        var _state = this.state,
-	            totalSec = _state.totalSec,
-	            countStatus = _state.countStatus;
+	        var _props = this.props,
+	            totalSec = _props.totalSec,
+	            countStatus = _props.countStatus;
 	
 	        return _react2['default'].createElement(
 	          'div',
@@ -30299,16 +30311,16 @@
 	      function componentDidUpdate(prevProps, prevState) {
 	        var _this2 = this;
 	
-	        var _state2 = this.state,
-	            totalSec = _state2.totalSec,
-	            countStatus = _state2.countStatus;
+	        var _props2 = this.props,
+	            totalSec = _props2.totalSec,
+	            countStatus = _props2.countStatus;
 	
 	        if (totalSec > 0 && countStatus == 'counting') {
 	          //keep ticking
 	          this.timer = setTimeout(function () {
 	            _this2.setTotalSec(totalSec - 1);
 	          }, 1000);
-	        } else if (this.state.countStatus == 'counting') {
+	        } else if (countStatus == 'counting') {
 	          this.setCountStatus('stopped');
 	        }
 	      }
@@ -30335,9 +30347,7 @@
 	    key: 'setTotalSec',
 	    value: function () {
 	      function setTotalSec(sec) {
-	        this.setState({
-	          totalSec: sec
-	        });
+	        this.props.setCountdownSec(sec);
 	      }
 	
 	      return setTotalSec;
@@ -30346,9 +30356,7 @@
 	    key: 'setCountStatus',
 	    value: function () {
 	      function setCountStatus(status) {
-	        this.setState({
-	          countStatus: status
-	        });
+	        this.props.setCountdownStatus(status);
 	      }
 	
 	      return setCountStatus;
@@ -30361,7 +30369,7 @@
 	
 	        if (status !== 'stopped') {
 	          return _react2['default'].createElement(_Controls2['default'], {
-	            countStatus: this.state.countStatus,
+	            countStatus: status,
 	            setCountStatus: function () {
 	              function setCountStatus(status) {
 	                return _this3.setCountStatus(status);
@@ -30392,15 +30400,27 @@
 	
 	      return renderControlArea;
 	    }()
-	
-	    //----
-	
 	  }]);
 	
 	  return Countdown;
 	}(_react.Component);
 	
-	exports['default'] = Countdown;
+	Countdown.propTypes = {
+	  totalSec: _react.PropTypes.number.isRequired,
+	  countStatus: _react.PropTypes.string.isRequired,
+	  setCountdownSec: _react.PropTypes.func.isRequired,
+	  setCountdownStatus: _react.PropTypes.func.isRequired
+	};
+	
+	exports['default'] = (0, _reactRedux.connect)(function (state) {
+	  return {
+	    countStatus: state.status,
+	    totalSec: state.sec
+	  };
+	}, {
+	  setCountdownSec: actions.setCountdownSec,
+	  setCountdownStatus: actions.setCountdownStatus
+	})(Countdown);
 
 /***/ },
 /* 279 */
@@ -30432,10 +30452,10 @@
 	var CountdownForm = function (_Component) {
 	  _inherits(CountdownForm, _Component);
 	
-	  function CountdownForm(props) {
+	  function CountdownForm() {
 	    _classCallCheck(this, CountdownForm);
 	
-	    return _possibleConstructorReturn(this, (CountdownForm.__proto__ || Object.getPrototypeOf(CountdownForm)).call(this, props));
+	    return _possibleConstructorReturn(this, (CountdownForm.__proto__ || Object.getPrototypeOf(CountdownForm)).apply(this, arguments));
 	  }
 	
 	  _createClass(CountdownForm, [{
@@ -30490,10 +30510,10 @@
 	  return CountdownForm;
 	}(_react.Component);
 	
-	// CountdownForm.propTypes = {
-	//   setTotalSec: PropTypes.func,
-	//   setCountStatus: PropTypes.func
-	// }
+	CountdownForm.propTypes = {
+	  setTotalSec: _react.PropTypes.func,
+	  setCountStatus: _react.PropTypes.func
+	};
 	
 	exports['default'] = CountdownForm;
 

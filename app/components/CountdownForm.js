@@ -1,9 +1,6 @@
 import React, {PropTypes, Component} from 'react'
 
 class CountdownForm extends Component {
-  constructor(props) {
-    super(props)
-  }
 
   render(){
     return(
@@ -32,9 +29,9 @@ class CountdownForm extends Component {
   }
 }
 
-// CountdownForm.propTypes = {
-//   setTotalSec: PropTypes.func,
-//   setCountStatus: PropTypes.func
-// }
+CountdownForm.propTypes = {
+  setTotalSec: PropTypes.func,
+  setCountStatus: PropTypes.func,
+}
 
 export default CountdownForm
