@@ -33,7 +33,7 @@ It will start a node server. Have fun!
 3. 最好遵照 Functional Programming 的原則去寫 React（包含 pure functions, 避免 side effects 以及 immutable data）
 4. 要非常了解 Component Life Cycle. 在計時器不斷改變 State 的情況下只要某個生命週期發生意外都會出錯，例如 componentWillUnmount 要清掉 setTimeout...
 
-我也是 React 初新手，只是有寫過幾個小專案有漸漸進入狀況的趨勢。雖然學習 React 過程辛苦，但是當你了解 React 的精神後覺得寫前端非常美好，而且用 JavaScript 來刻劃網頁非常有爽感吶！歡迎有任何問題可寄信到 **__joey54780@gmail.com__** 一起討論 React 的種種美好，程式碼有缺陷也不吝賜教，因為我以成為 JS 大大為目標邁進，你也可以和我一起進步！
+我也是 React 初新手，只是有寫過幾個小專案有漸漸進入狀況的趨勢。雖然學習 React 過程辛苦，但是當你了解 React 的精神後覺得寫前端非常美好，而且用 JavaScript 來刻劃網頁非常有爽感吶！歡迎有任何問題可寄信到 **__xjkit54780@gmail.com__** 一起討論 React 的種種美好，程式碼有缺陷也不吝賜教，因為我以成為 JS 大大為目標邁進，你也可以和我一起進步！
 
 ### change log
 
