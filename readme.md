@@ -23,7 +23,7 @@ It will start a node server. Have fun!
 
 ### 關於作者
 
-__鍾曜年 Jay Chung__ @[xJkit](https://github.com/xJkit)
+**``鍾曜年 Jay Chung``** @[xJkit](https://github.com/xJkit)
 一個由 React 實作的 Single Page Application（單頁應用程式）。
 
 經過三到四個小型專案的歷練，我認為較佳的 React 專案必須具備下列條件：
