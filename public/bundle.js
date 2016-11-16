@@ -133,6 +133,8 @@
 	
 	var _configureStore2 = _interopRequireDefault(_configureStore);
 	
+	var _reactRouter = __webpack_require__(/*! react-router */ 180);
+	
 	__webpack_require__(/*! style!css!sass!applicationStyles */ 285);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -147,7 +149,11 @@
 	_reactDom2['default'].render(_react2['default'].createElement(
 	  _reactRedux.Provider,
 	  { store: store },
-	  _routes2['default']
+	  _react2['default'].createElement(
+	    _reactRouter.Router,
+	    { history: _reactRouter.browserHistory },
+	    _routes2['default']
+	  )
 	), document.getElementById('app'));
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! jquery */ 7)))
 
@@ -22089,17 +22095,13 @@
 	
 	// Load components
 	var routes = _react2['default'].createElement(
-	  _reactRouter.Router,
-	  { history: _reactRouter.browserHistory },
-	  _react2['default'].createElement(
-	    _reactRouter.Route,
-	    { path: ROOT, component: _Main2['default'] },
-	    _react2['default'].createElement(_reactRouter.IndexRoute, { component: _Timer2['default'] }),
-	    _react2['default'].createElement(_reactRouter.Route, { path: 'timer', component: _Timer2['default'] }),
-	    _react2['default'].createElement(_reactRouter.Route, { path: 'countdown', component: _Countdown2['default'] }),
-	    _react2['default'].createElement(_reactRouter.Route, { path: 'about', component: _About2['default'] }),
-	    _react2['default'].createElement(_reactRouter.Route, { path: '*', component: _NotFound2['default'] })
-	  )
+	  _reactRouter.Route,
+	  { path: ROOT, component: _Main2['default'] },
+	  _react2['default'].createElement(_reactRouter.IndexRoute, { component: _Timer2['default'] }),
+	  _react2['default'].createElement(_reactRouter.Route, { path: 'timer', component: _Timer2['default'] }),
+	  _react2['default'].createElement(_reactRouter.Route, { path: 'countdown', component: _Countdown2['default'] }),
+	  _react2['default'].createElement(_reactRouter.Route, { path: 'about', component: _About2['default'] }),
+	  _react2['default'].createElement(_reactRouter.Route, { path: '*', component: _NotFound2['default'] })
 	);
 	
 	exports['default'] = routes;
@@ -28076,7 +28078,7 @@
 /***/ },
 /* 245 */
 /*!*********************************!*\
-  !*** ./app/components/Timer.js ***!
+  !*** ./app/containers/Timer.js ***!
   \*********************************/
 /***/ function(module, exports, __webpack_require__) {
 
@@ -28386,7 +28388,7 @@
 /***/ },
 /* 248 */
 /*!*************************************!*\
-  !*** ./app/components/Countdown.js ***!
+  !*** ./app/containers/Countdown.js ***!
   \*************************************/
 /***/ function(module, exports, __webpack_require__) {
 

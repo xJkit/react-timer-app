@@ -1,5 +1,5 @@
 import React from 'react'
-import {Route, Router, IndexRoute, browserHistory} from 'react-router'
+import {Route, IndexRoute, browserHistory} from 'react-router'
 
 // Load components
 import Main from 'Main'
@@ -13,15 +13,13 @@ const ROOT = '/'
 
 // main routes
 const routes = (
-  <Router history={browserHistory}>
-    <Route path={ROOT} component={Main}>
-      <IndexRoute component={Timer} />
-      <Route path="timer" component={Timer} />
-      <Route path="countdown" component={Countdown} />
-      <Route path="about" component={About} />
+  <Route path={ROOT} component={Main}>
+    <IndexRoute component={Timer} />
+    <Route path="timer" component={Timer} />
+    <Route path="countdown" component={Countdown} />
+    <Route path="about" component={About} />
     <Route path="*" component={NotFound} />
-    </Route>
-  </Router>
+  </Route>
 )
 
 export default routes
