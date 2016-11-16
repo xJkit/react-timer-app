@@ -27,6 +27,7 @@ __鍾曜年 Jay Chung__ @[xJkit](https://github.com/xJkit)
 一個由 React 實作的 Single Page Application（單頁應用程式）。
 
 經過三到四個小型專案的歷練，我認為較佳的 React 專案必須具備下列條件：
+
 1. 懂得選擇 Smart Components 以及 Dumb Components（也就是 Class-based Components 與 Stateless Functional Components）
 2. 同時寫測試。個人覺得這很重要，但是測試真的很無聊...而且也很難上手！
 3. 最好遵照 Functional Programming 的原則去寫 React（包含 pure functions, 避免 side effects 以及 immutable data）
