@@ -1,36 +1,41 @@
-import React, {Component} from 'react'
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import * as actions from '../actions'
 //components
 import Clock from 'Clock'
 import Controls from 'Controls'
 
 class Timer extends Component {
-  constructor(props) {
-    super(props)
 
-    this.state = {
-      totalSec: 0,
-      countStatus: 'stopped'
-    }
-  }
+  // static propTypes = {
+  //   totalSec: PropTypes.number.isRequired,
+  //   countStatus: PropTypes.string.isRequired,
+  //   setTimerStatus: PropTypes.func.isRequired,
+  //   setTimerSec: PropTypes.func.isRequired,
+  // }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (nextState.countStatus == 'paused') {
-      clearTimeout(this.timer)
-      return true
-    } else if (nextState.countStatus == 'stopped') {
-      nextState.totalSec = 0
-      return true
-    } else {
-      return true
+
+    switch (nextProps.countStatus) {
+      case 'paused':
+        clearTimeout(this.timer)
+        return true
+      case 'stopped':
+        // nextProps.totalSec = 0
+        this.props.setTimerSec(0)
+        return true
+      default:
+        return true
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if(this.state.countStatus == 'counting') {
+  componentDidUpdate (prevProps, prevState) {
+    if(this.props.countStatus == 'counting') {
       this.timer = setTimeout(() => {
-        this.setState({
-          totalSec: this.state.totalSec + 1
-        })
+        // this.setState({
+        //   totalSec: this.state.totalSec + 1
+        // })
+        this.props.setTimerSec(this.props.totalSec + 1)
       }, 1000)
     }
   }
@@ -41,14 +46,11 @@ class Timer extends Component {
 
 
   setCountStatus(status) {
-    const newStatus = status
-    this.setState({
-      countStatus: newStatus
-    })
+    this.props.setTimerStatus(status)
   }
 
   render() {
-    const {totalSec, countStatus} = this.state
+    const {totalSec, countStatus} = this.props
 
     return(
       <div className="timer">
@@ -58,7 +60,19 @@ class Timer extends Component {
       </div>
     )
   }
-
 }
 
-export default Timer
+Timer.propTypes = {
+  totalSec: PropTypes.number.isRequired,
+  countStatus: PropTypes.string.isRequired,
+  setTimerStatus: PropTypes.func.isRequired,
+  setTimerSec: PropTypes.func.isRequired,
+}
+
+export default connect( state => ({
+  totalSec: state.sec,
+  countStatus: state.status
+}), {
+  setTimerStatus: actions.setTimerStatus,
+  setTimerSec: actions.setTimerSec
+})(Timer)

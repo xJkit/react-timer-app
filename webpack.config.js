@@ -42,7 +42,7 @@ module.exports = {
       {
         loader: 'babel-loader',
         query: {
-          presets: ['react', 'es2015', 'stage-0', 'airbnb']
+          presets: ["react", "es2015", "stage-0", "airbnb"]
         },
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/

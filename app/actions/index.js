@@ -2,14 +2,14 @@
 import * as Types from './ActionTypes';
 
 
-export const setTimerStatus = bool => ({
+export const setTimerStatus = status => ({
   type: Types.SET_TIMER_STATUS,
-  status: bool
+  status
 })
 
-export const setCountdownStatus = bool => ({
+export const setCountdownStatus = status => ({
   type: Types.SET_COUNTDOWN_STATUS,
-  status: bool
+  status
 })
 
 export const setTimerSec = sec => ({

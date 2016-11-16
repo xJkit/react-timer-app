@@ -1,6 +1,6 @@
 import * as Types from '../actions/ActionTypes';
 
-const statusReducer = (state = false, action) => {
+const statusReducer = (state = 'stopped', action) => {
   switch (action.type) {
     case Types.SET_TIMER_STATUS:
       return action.status

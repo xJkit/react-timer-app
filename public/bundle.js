@@ -127,15 +127,15 @@
 	
 	var _routes2 = _interopRequireDefault(_routes);
 	
-	var _reactRedux = __webpack_require__(/*! react-redux */ 252);
+	var _reactRedux = __webpack_require__(/*! react-redux */ 246);
 	
-	var _configureStore = __webpack_require__(/*! ./store/configureStore */ 280);
+	var _configureStore = __webpack_require__(/*! ./store/configureStore */ 282);
 	
 	var _configureStore2 = _interopRequireDefault(_configureStore);
 	
 	var _reactRouter = __webpack_require__(/*! react-router */ 180);
 	
-	__webpack_require__(/*! style!css!sass!applicationStyles */ 285);
+	__webpack_require__(/*! style!css!sass!applicationStyles */ 286);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
@@ -22073,15 +22073,15 @@
 	
 	var _Timer2 = _interopRequireDefault(_Timer);
 	
-	var _Countdown = __webpack_require__(/*! Countdown */ 248);
+	var _Countdown = __webpack_require__(/*! Countdown */ 278);
 	
 	var _Countdown2 = _interopRequireDefault(_Countdown);
 	
-	var _About = __webpack_require__(/*! About */ 250);
+	var _About = __webpack_require__(/*! About */ 280);
 	
 	var _About2 = _interopRequireDefault(_About);
 	
-	var _NotFound = __webpack_require__(/*! NotFound */ 251);
+	var _NotFound = __webpack_require__(/*! NotFound */ 281);
 	
 	var _NotFound2 = _interopRequireDefault(_NotFound);
 	
@@ -28094,13 +28094,21 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Clock = __webpack_require__(/*! Clock */ 246);
+	var _reactRedux = __webpack_require__(/*! react-redux */ 246);
+	
+	var _actions = __webpack_require__(/*! ../actions */ 274);
+	
+	var actions = _interopRequireWildcard(_actions);
+	
+	var _Clock = __webpack_require__(/*! Clock */ 276);
 	
 	var _Clock2 = _interopRequireDefault(_Clock);
 	
-	var _Controls = __webpack_require__(/*! Controls */ 247);
+	var _Controls = __webpack_require__(/*! Controls */ 277);
 	
 	var _Controls2 = _interopRequireDefault(_Controls);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
@@ -28115,30 +28123,36 @@
 	var Timer = function (_Component) {
 	  _inherits(Timer, _Component);
 	
-	  function Timer(props) {
+	  function Timer() {
 	    _classCallCheck(this, Timer);
 	
-	    var _this = _possibleConstructorReturn(this, (Timer.__proto__ || Object.getPrototypeOf(Timer)).call(this, props));
-	
-	    _this.state = {
-	      totalSec: 0,
-	      countStatus: 'stopped'
-	    };
-	    return _this;
+	    return _possibleConstructorReturn(this, (Timer.__proto__ || Object.getPrototypeOf(Timer)).apply(this, arguments));
 	  }
 	
 	  _createClass(Timer, [{
 	    key: 'shouldComponentUpdate',
+	
+	
+	    // static propTypes = {
+	    //   totalSec: PropTypes.number.isRequired,
+	    //   countStatus: PropTypes.string.isRequired,
+	    //   setTimerStatus: PropTypes.func.isRequired,
+	    //   setTimerSec: PropTypes.func.isRequired,
+	    // }
+	
 	    value: function () {
 	      function shouldComponentUpdate(nextProps, nextState) {
-	        if (nextState.countStatus == 'paused') {
-	          clearTimeout(this.timer);
-	          return true;
-	        } else if (nextState.countStatus == 'stopped') {
-	          nextState.totalSec = 0;
-	          return true;
-	        } else {
-	          return true;
+	
+	        switch (nextProps.countStatus) {
+	          case 'paused':
+	            clearTimeout(this.timer);
+	            return true;
+	          case 'stopped':
+	            // nextProps.totalSec = 0
+	            this.props.setTimerSec(0);
+	            return true;
+	          default:
+	            return true;
 	        }
 	      }
 	
@@ -28150,11 +28164,12 @@
 	      function componentDidUpdate(prevProps, prevState) {
 	        var _this2 = this;
 	
-	        if (this.state.countStatus == 'counting') {
+	        if (this.props.countStatus == 'counting') {
 	          this.timer = setTimeout(function () {
-	            _this2.setState({
-	              totalSec: _this2.state.totalSec + 1
-	            });
+	            // this.setState({
+	            //   totalSec: this.state.totalSec + 1
+	            // })
+	            _this2.props.setTimerSec(_this2.props.totalSec + 1);
 	          }, 1000);
 	        }
 	      }
@@ -28174,10 +28189,7 @@
 	    key: 'setCountStatus',
 	    value: function () {
 	      function setCountStatus(status) {
-	        var newStatus = status;
-	        this.setState({
-	          countStatus: newStatus
-	        });
+	        this.props.setTimerStatus(status);
 	      }
 	
 	      return setCountStatus;
@@ -28188,9 +28200,9 @@
 	      function render() {
 	        var _this3 = this;
 	
-	        var _state = this.state,
-	            totalSec = _state.totalSec,
-	            countStatus = _state.countStatus;
+	        var _props = this.props,
+	            totalSec = _props.totalSec,
+	            countStatus = _props.countStatus;
 	
 	
 	        return _react2['default'].createElement(
@@ -28219,605 +28231,25 @@
 	  return Timer;
 	}(_react.Component);
 	
-	exports['default'] = Timer;
+	Timer.propTypes = {
+	  totalSec: _react.PropTypes.number.isRequired,
+	  countStatus: _react.PropTypes.string.isRequired,
+	  setTimerStatus: _react.PropTypes.func.isRequired,
+	  setTimerSec: _react.PropTypes.func.isRequired
+	};
+	
+	exports['default'] = (0, _reactRedux.connect)(function (state) {
+	  return {
+	    totalSec: state.sec,
+	    countStatus: state.status
+	  };
+	}, {
+	  setTimerStatus: actions.setTimerStatus,
+	  setTimerSec: actions.setTimerSec
+	})(Timer);
 
 /***/ },
 /* 246 */
-/*!*********************************!*\
-  !*** ./app/components/Clock.js ***!
-  \*********************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(/*! react */ 8);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	var Clock = function Clock(props) {
-	  var totalSec = props.totalSec,
-	      countStatus = props.countStatus;
-	  //------- helper functions
-	
-	  var formatSeconds = function formatSeconds(totalSeconds) {
-	    var sec = totalSeconds % 60;
-	    var min = Math.floor(totalSeconds / 60);
-	    // check for less than 10
-	    if (sec < 10) {
-	      sec = '0' + sec;
-	    }
-	
-	    if (min < 10) {
-	      min = '0' + min;
-	    }
-	
-	    return String(min) + ':' + String(sec);
-	  };
-	
-	  var renderClock = function renderClock() {
-	    if (countStatus == 'stopped') {
-	      return _react2['default'].createElement(
-	        'div',
-	        { className: 'clock primary' },
-	        _react2['default'].createElement(
-	          'span',
-	          { className: 'sec' },
-	          formatSeconds(totalSec)
-	        )
-	      );
-	    } else {
-	      return _react2['default'].createElement(
-	        'div',
-	        { className: 'clock alert' },
-	        _react2['default'].createElement(
-	          'span',
-	          { className: 'sec' },
-	          formatSeconds(totalSec)
-	        )
-	      );
-	    }
-	  };
-	  // --------
-	
-	  return renderClock();
-	};
-	
-	Clock.propTypes = {
-	  totalSec: _react.PropTypes.number,
-	  countStatus: _react.PropTypes.string
-	};
-	
-	//checks
-	Clock.defaultProps = {
-	  totalSec: 0,
-	  countStatus: 'stopped'
-	};
-	
-	exports['default'] = Clock;
-
-/***/ },
-/* 247 */
-/*!************************************!*\
-  !*** ./app/components/Controls.js ***!
-  \************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(/*! react */ 8);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	var Controls = function Controls(props) {
-	  var countStatus = props.countStatus,
-	      setCountStatus = props.setCountStatus;
-	
-	  var renderStartStopBtn = function renderStartStopBtn() {
-	    if (countStatus == 'counting') {
-	      return _react2['default'].createElement(
-	        'div',
-	        { className: 'button-group' },
-	        _react2['default'].createElement(
-	          'button',
-	          { className: 'button alert pause', onClick: function () {
-	              function onClick(e) {
-	                return setCountStatus('paused');
-	              }
-	
-	              return onClick;
-	            }() },
-	          'Pause'
-	        )
-	      );
-	    } else {
-	      return _react2['default'].createElement(
-	        'div',
-	        { className: 'button-group' },
-	        _react2['default'].createElement(
-	          'button',
-	          { className: 'button primary start', onClick: function () {
-	              function onClick(e) {
-	                return setCountStatus('counting');
-	              }
-	
-	              return onClick;
-	            }() },
-	          'Start'
-	        )
-	      );
-	    }
-	  };
-	
-	  return _react2['default'].createElement(
-	    'div',
-	    { className: 'controls' },
-	    renderStartStopBtn(),
-	    _react2['default'].createElement(
-	      'button',
-	      { className: 'button hollow primary clear', onClick: function () {
-	          function onClick(e) {
-	            return setCountStatus('stopped');
-	          }
-	
-	          return onClick;
-	        }() },
-	      'Clear'
-	    )
-	  );
-	};
-	
-	Controls.propTypes = {
-	  countStatus: _react.PropTypes.string,
-	  setCountStatus: _react.PropTypes.func
-	};
-	
-	exports['default'] = Controls;
-
-/***/ },
-/* 248 */
-/*!*************************************!*\
-  !*** ./app/containers/Countdown.js ***!
-  \*************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(/*! react */ 8);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _Clock = __webpack_require__(/*! Clock */ 246);
-	
-	var _Clock2 = _interopRequireDefault(_Clock);
-	
-	var _CountdownForm = __webpack_require__(/*! CountdownForm */ 249);
-	
-	var _CountdownForm2 = _interopRequireDefault(_CountdownForm);
-	
-	var _Controls = __webpack_require__(/*! Controls */ 247);
-	
-	var _Controls2 = _interopRequireDefault(_Controls);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	//Components
-	
-	
-	var Countdown = function (_Component) {
-	  _inherits(Countdown, _Component);
-	
-	  function Countdown(props) {
-	    _classCallCheck(this, Countdown);
-	
-	    var _this = _possibleConstructorReturn(this, (Countdown.__proto__ || Object.getPrototypeOf(Countdown)).call(this, props));
-	
-	    _this.state = {
-	      totalSec: 0,
-	      countStatus: 'stopped'
-	    };
-	    return _this;
-	  }
-	
-	  _createClass(Countdown, [{
-	    key: 'shouldComponentUpdate',
-	    value: function () {
-	      function shouldComponentUpdate(nextProps, nextState) {
-	        if (nextState.countStatus == 'paused') {
-	          clearTimeout(this.timer);
-	          return true;
-	        } else if (nextState.countStatus == 'stopped') {
-	          nextState.totalSec = 0;
-	          return true;
-	        } else {
-	          return true;
-	        }
-	      }
-	
-	      return shouldComponentUpdate;
-	    }()
-	  }, {
-	    key: 'render',
-	    value: function () {
-	      function render() {
-	        var _state = this.state,
-	            totalSec = _state.totalSec,
-	            countStatus = _state.countStatus;
-	
-	        return _react2['default'].createElement(
-	          'div',
-	          { className: 'countdown' },
-	          _react2['default'].createElement(
-	            'h1',
-	            null,
-	            'Countdown'
-	          ),
-	          _react2['default'].createElement(_Clock2['default'], { totalSec: totalSec, countStatus: countStatus }),
-	          this.renderControlArea(countStatus)
-	        );
-	      }
-	
-	      return render;
-	    }()
-	  }, {
-	    key: 'componentDidUpdate',
-	    value: function () {
-	      function componentDidUpdate(prevProps, prevState) {
-	        var _this2 = this;
-	
-	        var _state2 = this.state,
-	            totalSec = _state2.totalSec,
-	            countStatus = _state2.countStatus;
-	
-	        if (totalSec > 0 && countStatus == 'counting') {
-	          //keep ticking
-	          this.timer = setTimeout(function () {
-	            _this2.setTotalSec(totalSec - 1);
-	          }, 1000);
-	        } else if (this.state.countStatus == 'counting') {
-	          this.setCountStatus('stopped');
-	        }
-	      }
-	
-	      return componentDidUpdate;
-	    }()
-	    // componentWillMount() {
-	    //   console.log('countdown component will mount')
-	    // }
-	
-	  }, {
-	    key: 'componentWillUnmount',
-	    value: function () {
-	      function componentWillUnmount() {
-	        clearTimeout(this.timer);
-	      }
-	
-	      return componentWillUnmount;
-	    }()
-	
-	    //---helper functions
-	
-	  }, {
-	    key: 'setTotalSec',
-	    value: function () {
-	      function setTotalSec(sec) {
-	        this.setState({
-	          totalSec: sec
-	        });
-	      }
-	
-	      return setTotalSec;
-	    }()
-	  }, {
-	    key: 'setCountStatus',
-	    value: function () {
-	      function setCountStatus(status) {
-	        this.setState({
-	          countStatus: status
-	        });
-	      }
-	
-	      return setCountStatus;
-	    }()
-	  }, {
-	    key: 'renderControlArea',
-	    value: function () {
-	      function renderControlArea(status) {
-	        var _this3 = this;
-	
-	        if (status !== 'stopped') {
-	          return _react2['default'].createElement(_Controls2['default'], {
-	            countStatus: this.state.countStatus,
-	            setCountStatus: function () {
-	              function setCountStatus(status) {
-	                return _this3.setCountStatus(status);
-	              }
-	
-	              return setCountStatus;
-	            }()
-	          });
-	        } else {
-	          return _react2['default'].createElement(_CountdownForm2['default'], {
-	            setTotalSec: function () {
-	              function setTotalSec(sec) {
-	                return _this3.setTotalSec(sec);
-	              }
-	
-	              return setTotalSec;
-	            }(),
-	            setCountStatus: function () {
-	              function setCountStatus(status) {
-	                return _this3.setCountStatus(status);
-	              }
-	
-	              return setCountStatus;
-	            }()
-	          });
-	        }
-	      }
-	
-	      return renderControlArea;
-	    }()
-	
-	    //----
-	
-	  }]);
-	
-	  return Countdown;
-	}(_react.Component);
-	
-	exports['default'] = Countdown;
-
-/***/ },
-/* 249 */
-/*!*****************************************!*\
-  !*** ./app/components/CountdownForm.js ***!
-  \*****************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(/*! react */ 8);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var CountdownForm = function (_Component) {
-	  _inherits(CountdownForm, _Component);
-	
-	  function CountdownForm(props) {
-	    _classCallCheck(this, CountdownForm);
-	
-	    return _possibleConstructorReturn(this, (CountdownForm.__proto__ || Object.getPrototypeOf(CountdownForm)).call(this, props));
-	  }
-	
-	  _createClass(CountdownForm, [{
-	    key: 'render',
-	    value: function () {
-	      function render() {
-	        var _this2 = this;
-	
-	        return _react2['default'].createElement(
-	          'form',
-	          { className: 'countdown-form', onSubmit: function () {
-	              function onSubmit(e) {
-	                return _this2.onSubmitSec(e);
-	              }
-	
-	              return onSubmit;
-	            }() },
-	          _react2['default'].createElement('input', { type: 'text', placeholder: '\u8F38\u5165\u7E3D\u79D2\u6578', ref: 'secField' }),
-	          _react2['default'].createElement(
-	            'button',
-	            { className: 'button expanded' },
-	            '\u958B\u59CB\u5012\u6578'
-	          )
-	        );
-	      }
-	
-	      return render;
-	    }()
-	  }, {
-	    key: 'onSubmitSec',
-	    value: function () {
-	      function onSubmitSec(e) {
-	        e.preventDefault();
-	        var setTotalSec = this.props.setTotalSec;
-	        var setCountStatus = this.props.setCountStatus;
-	        var inputField = this.refs.secField.value;
-	
-	        if (inputField.length > 0 && inputField.match(/^[0-9]*$/)) {
-	          var totalSec = Number(inputField);
-	          this.refs.secField.value = "";
-	          setTotalSec(totalSec);
-	          setCountStatus('counting');
-	        } else {
-	          this.refs.secField.focus();
-	        }
-	      }
-	
-	      return onSubmitSec;
-	    }()
-	  }]);
-	
-	  return CountdownForm;
-	}(_react.Component);
-	
-	// CountdownForm.propTypes = {
-	//   setTotalSec: PropTypes.func,
-	//   setCountStatus: PropTypes.func
-	// }
-	
-	exports['default'] = CountdownForm;
-
-/***/ },
-/* 250 */
-/*!*********************************!*\
-  !*** ./app/components/About.js ***!
-  \*********************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(/*! react */ 8);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-	
-	var About = function About() {
-	  return _react2["default"].createElement(
-	    "div",
-	    { className: "about" },
-	    _react2["default"].createElement(
-	      "h1",
-	      null,
-	      "\u95DC\u65BC\u4F5C\u8005"
-	    ),
-	    _react2["default"].createElement(
-	      "h6",
-	      { className: "center" },
-	      "\u937E\u66DC\u5E74 Jay Chung"
-	    ),
-	    _react2["default"].createElement(
-	      "h6",
-	      { className: "center" },
-	      "Github: ",
-	      _react2["default"].createElement(
-	        "a",
-	        { href: "https://github.com/xJkit", target: "_blank" },
-	        "xJkit"
-	      )
-	    ),
-	    _react2["default"].createElement(
-	      "div",
-	      { className: "description" },
-	      _react2["default"].createElement(
-	        "p",
-	        null,
-	        "\u4E00\u500B\u7531 React \u5BE6\u4F5C\u7684 Single Page Application\uFF08\u55AE\u9801\u61C9\u7528\u7A0B\u5F0F\uFF09\u3002"
-	      ),
-	      _react2["default"].createElement(
-	        "p",
-	        null,
-	        "\u7D93\u904E\u4E09\u5230\u56DB\u500B\u5C0F\u578B\u5C08\u6848\u7684\u6B77\u7DF4\uFF0C\u6211\u8A8D\u70BA\u8F03\u4F73\u7684 React \u5C08\u6848\u5FC5\u9808\u5177\u5099\u4E0B\u5217\u689D\u4EF6\uFF1A"
-	      ),
-	      _react2["default"].createElement(
-	        "ol",
-	        null,
-	        _react2["default"].createElement(
-	          "li",
-	          null,
-	          "\u61C2\u5F97\u9078\u64C7 Smart Components \u4EE5\u53CA Dumb Components\uFF08\u4E5F\u5C31\u662F Class-based Components \u8207 Stateless Functional Components\uFF09"
-	        ),
-	        _react2["default"].createElement(
-	          "li",
-	          null,
-	          "\u540C\u6642\u5BEB\u6E2C\u8A66\u3002\u500B\u4EBA\u89BA\u5F97\u9019\u5F88\u91CD\u8981\uFF0C\u4F46\u662F\u6E2C\u8A66\u771F\u7684\u5F88\u7121\u804A...\u800C\u4E14\u4E5F\u5F88\u96E3\u4E0A\u624B\uFF01"
-	        ),
-	        _react2["default"].createElement(
-	          "li",
-	          null,
-	          "\u6700\u597D\u9075\u7167 Functional Programming \u7684\u539F\u5247\u53BB\u5BEB React\uFF08\u5305\u542B pure functions, \u907F\u514D side effects \u4EE5\u53CA immutable data\uFF09"
-	        ),
-	        _react2["default"].createElement(
-	          "li",
-	          null,
-	          "\u8981\u975E\u5E38\u4E86\u89E3 Component Life Cycle. \u5728\u8A08\u6642\u5668\u4E0D\u65B7\u6539\u8B8A State \u7684\u60C5\u6CC1\u4E0B\u53EA\u8981\u67D0\u500B\u751F\u547D\u9031\u671F\u767C\u751F\u610F\u5916\u90FD\u6703\u51FA\u932F\uFF0C\u4F8B\u5982 componentWillUnmount \u8981\u6E05\u6389 setTimeout..."
-	        )
-	      ),
-	      _react2["default"].createElement(
-	        "p",
-	        null,
-	        "\u6211\u4E5F\u662F React \u521D\u65B0\u624B\uFF0C\u53EA\u662F\u6709\u5BEB\u904E\u5E7E\u500B\u5C0F\u5C08\u6848\u6709\u6F38\u6F38\u9032\u5165\u72C0\u6CC1\u7684\u8DA8\u52E2\u3002\u96D6\u7136\u5B78\u7FD2 React \u904E\u7A0B\u8F9B\u82E6\uFF0C\u4F46\u662F\u7576\u4F60\u4E86\u89E3 React \u7684\u7CBE\u795E\u5F8C\u89BA\u5F97\u5BEB\u524D\u7AEF\u975E\u5E38\u7F8E\u597D\uFF0C\u800C\u4E14\u7528 JavaScript \u4F86\u523B\u5283\u7DB2\u9801\u975E\u5E38\u6709\u723D\u611F\u5436\uFF01\u6B61\u8FCE\u6709\u4EFB\u4F55\u554F\u984C\u53EF\u5BC4\u4FE1\u5230 ",
-	        _react2["default"].createElement(
-	          "a",
-	          { href: "mailto:joey54780@gmail.com" },
-	          "joey54780@gmail.com"
-	        ),
-	        " \u4E00\u8D77\u8A0E\u8AD6 React \u7684\u7A2E\u7A2E\u7F8E\u597D\uFF0C\u7A0B\u5F0F\u78BC\u6709\u7F3A\u9677\u4E5F\u4E0D\u541D\u8CDC\u6559\uFF0C\u56E0\u70BA\u6211\u4EE5\u6210\u70BA JS \u5927\u5927\u70BA\u76EE\u6A19\u9081\u9032\uFF0C\u4F60\u4E5F\u53EF\u4EE5\u548C\u6211\u4E00\u8D77\u9032\u6B65\uFF01"
-	      ),
-	      _react2["default"].createElement(
-	        "p",
-	        { className: "center" },
-	        "\u611F\u6069 React\uFF0C\u8B9A\u5606 React\u3002"
-	      )
-	    )
-	  );
-	};
-	
-	exports["default"] = About;
-
-/***/ },
-/* 251 */
-/*!************************************!*\
-  !*** ./app/components/NotFound.js ***!
-  \************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(/*! react */ 8);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	var NotFound = function NotFound(props) {
-	  return _react2['default'].createElement(
-	    'div',
-	    null,
-	    'Not Found and You got 404 Error. Please back to the home page.'
-	  );
-	};
-	
-	exports['default'] = NotFound;
-
-/***/ },
-/* 252 */
 /*!************************************!*\
   !*** ./~/react-redux/lib/index.js ***!
   \************************************/
@@ -28828,11 +28260,11 @@
 	exports.__esModule = true;
 	exports.connect = exports.Provider = undefined;
 	
-	var _Provider = __webpack_require__(/*! ./components/Provider */ 253);
+	var _Provider = __webpack_require__(/*! ./components/Provider */ 247);
 	
 	var _Provider2 = _interopRequireDefault(_Provider);
 	
-	var _connect = __webpack_require__(/*! ./components/connect */ 256);
+	var _connect = __webpack_require__(/*! ./components/connect */ 250);
 	
 	var _connect2 = _interopRequireDefault(_connect);
 	
@@ -28842,7 +28274,7 @@
 	exports.connect = _connect2["default"];
 
 /***/ },
-/* 253 */
+/* 247 */
 /*!**************************************************!*\
   !*** ./~/react-redux/lib/components/Provider.js ***!
   \**************************************************/
@@ -28855,11 +28287,11 @@
 	
 	var _react = __webpack_require__(/*! react */ 8);
 	
-	var _storeShape = __webpack_require__(/*! ../utils/storeShape */ 254);
+	var _storeShape = __webpack_require__(/*! ../utils/storeShape */ 248);
 	
 	var _storeShape2 = _interopRequireDefault(_storeShape);
 	
-	var _warning = __webpack_require__(/*! ../utils/warning */ 255);
+	var _warning = __webpack_require__(/*! ../utils/warning */ 249);
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
@@ -28929,7 +28361,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/process/browser.js */ 10)))
 
 /***/ },
-/* 254 */
+/* 248 */
 /*!***********************************************!*\
   !*** ./~/react-redux/lib/utils/storeShape.js ***!
   \***********************************************/
@@ -28948,7 +28380,7 @@
 	});
 
 /***/ },
-/* 255 */
+/* 249 */
 /*!********************************************!*\
   !*** ./~/react-redux/lib/utils/warning.js ***!
   \********************************************/
@@ -28981,7 +28413,7 @@
 	}
 
 /***/ },
-/* 256 */
+/* 250 */
 /*!*************************************************!*\
   !*** ./~/react-redux/lib/components/connect.js ***!
   \*************************************************/
@@ -28997,23 +28429,23 @@
 	
 	var _react = __webpack_require__(/*! react */ 8);
 	
-	var _storeShape = __webpack_require__(/*! ../utils/storeShape */ 254);
+	var _storeShape = __webpack_require__(/*! ../utils/storeShape */ 248);
 	
 	var _storeShape2 = _interopRequireDefault(_storeShape);
 	
-	var _shallowEqual = __webpack_require__(/*! ../utils/shallowEqual */ 257);
+	var _shallowEqual = __webpack_require__(/*! ../utils/shallowEqual */ 251);
 	
 	var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
 	
-	var _wrapActionCreators = __webpack_require__(/*! ../utils/wrapActionCreators */ 258);
+	var _wrapActionCreators = __webpack_require__(/*! ../utils/wrapActionCreators */ 252);
 	
 	var _wrapActionCreators2 = _interopRequireDefault(_wrapActionCreators);
 	
-	var _warning = __webpack_require__(/*! ../utils/warning */ 255);
+	var _warning = __webpack_require__(/*! ../utils/warning */ 249);
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
-	var _isPlainObject = __webpack_require__(/*! lodash/isPlainObject */ 261);
+	var _isPlainObject = __webpack_require__(/*! lodash/isPlainObject */ 255);
 	
 	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 	
@@ -29385,7 +28817,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/process/browser.js */ 10)))
 
 /***/ },
-/* 257 */
+/* 251 */
 /*!*************************************************!*\
   !*** ./~/react-redux/lib/utils/shallowEqual.js ***!
   \*************************************************/
@@ -29419,7 +28851,7 @@
 	}
 
 /***/ },
-/* 258 */
+/* 252 */
 /*!*******************************************************!*\
   !*** ./~/react-redux/lib/utils/wrapActionCreators.js ***!
   \*******************************************************/
@@ -29430,7 +28862,7 @@
 	exports.__esModule = true;
 	exports["default"] = wrapActionCreators;
 	
-	var _redux = __webpack_require__(/*! redux */ 259);
+	var _redux = __webpack_require__(/*! redux */ 253);
 	
 	function wrapActionCreators(actionCreators) {
 	  return function (dispatch) {
@@ -29439,7 +28871,7 @@
 	}
 
 /***/ },
-/* 259 */
+/* 253 */
 /*!******************************!*\
   !*** ./~/redux/lib/index.js ***!
   \******************************/
@@ -29450,27 +28882,27 @@
 	exports.__esModule = true;
 	exports.compose = exports.applyMiddleware = exports.bindActionCreators = exports.combineReducers = exports.createStore = undefined;
 	
-	var _createStore = __webpack_require__(/*! ./createStore */ 260);
+	var _createStore = __webpack_require__(/*! ./createStore */ 254);
 	
 	var _createStore2 = _interopRequireDefault(_createStore);
 	
-	var _combineReducers = __webpack_require__(/*! ./combineReducers */ 275);
+	var _combineReducers = __webpack_require__(/*! ./combineReducers */ 269);
 	
 	var _combineReducers2 = _interopRequireDefault(_combineReducers);
 	
-	var _bindActionCreators = __webpack_require__(/*! ./bindActionCreators */ 277);
+	var _bindActionCreators = __webpack_require__(/*! ./bindActionCreators */ 271);
 	
 	var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
 	
-	var _applyMiddleware = __webpack_require__(/*! ./applyMiddleware */ 278);
+	var _applyMiddleware = __webpack_require__(/*! ./applyMiddleware */ 272);
 	
 	var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
 	
-	var _compose = __webpack_require__(/*! ./compose */ 279);
+	var _compose = __webpack_require__(/*! ./compose */ 273);
 	
 	var _compose2 = _interopRequireDefault(_compose);
 	
-	var _warning = __webpack_require__(/*! ./utils/warning */ 276);
+	var _warning = __webpack_require__(/*! ./utils/warning */ 270);
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
@@ -29494,7 +28926,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/process/browser.js */ 10)))
 
 /***/ },
-/* 260 */
+/* 254 */
 /*!************************************!*\
   !*** ./~/redux/lib/createStore.js ***!
   \************************************/
@@ -29506,11 +28938,11 @@
 	exports.ActionTypes = undefined;
 	exports['default'] = createStore;
 	
-	var _isPlainObject = __webpack_require__(/*! lodash/isPlainObject */ 261);
+	var _isPlainObject = __webpack_require__(/*! lodash/isPlainObject */ 255);
 	
 	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 	
-	var _symbolObservable = __webpack_require__(/*! symbol-observable */ 271);
+	var _symbolObservable = __webpack_require__(/*! symbol-observable */ 265);
 	
 	var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
 	
@@ -29763,15 +29195,15 @@
 	}
 
 /***/ },
-/* 261 */
+/* 255 */
 /*!***********************************!*\
   !*** ./~/lodash/isPlainObject.js ***!
   \***********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseGetTag = __webpack_require__(/*! ./_baseGetTag */ 262),
-	    getPrototype = __webpack_require__(/*! ./_getPrototype */ 268),
-	    isObjectLike = __webpack_require__(/*! ./isObjectLike */ 270);
+	var baseGetTag = __webpack_require__(/*! ./_baseGetTag */ 256),
+	    getPrototype = __webpack_require__(/*! ./_getPrototype */ 262),
+	    isObjectLike = __webpack_require__(/*! ./isObjectLike */ 264);
 	
 	/** `Object#toString` result references. */
 	var objectTag = '[object Object]';
@@ -29834,15 +29266,15 @@
 
 
 /***/ },
-/* 262 */
+/* 256 */
 /*!*********************************!*\
   !*** ./~/lodash/_baseGetTag.js ***!
   \*********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var Symbol = __webpack_require__(/*! ./_Symbol */ 263),
-	    getRawTag = __webpack_require__(/*! ./_getRawTag */ 266),
-	    objectToString = __webpack_require__(/*! ./_objectToString */ 267);
+	var Symbol = __webpack_require__(/*! ./_Symbol */ 257),
+	    getRawTag = __webpack_require__(/*! ./_getRawTag */ 260),
+	    objectToString = __webpack_require__(/*! ./_objectToString */ 261);
 	
 	/** `Object#toString` result references. */
 	var nullTag = '[object Null]',
@@ -29872,13 +29304,13 @@
 
 
 /***/ },
-/* 263 */
+/* 257 */
 /*!*****************************!*\
   !*** ./~/lodash/_Symbol.js ***!
   \*****************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var root = __webpack_require__(/*! ./_root */ 264);
+	var root = __webpack_require__(/*! ./_root */ 258);
 	
 	/** Built-in value references. */
 	var Symbol = root.Symbol;
@@ -29887,13 +29319,13 @@
 
 
 /***/ },
-/* 264 */
+/* 258 */
 /*!***************************!*\
   !*** ./~/lodash/_root.js ***!
   \***************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var freeGlobal = __webpack_require__(/*! ./_freeGlobal */ 265);
+	var freeGlobal = __webpack_require__(/*! ./_freeGlobal */ 259);
 	
 	/** Detect free variable `self`. */
 	var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
@@ -29905,7 +29337,7 @@
 
 
 /***/ },
-/* 265 */
+/* 259 */
 /*!*********************************!*\
   !*** ./~/lodash/_freeGlobal.js ***!
   \*********************************/
@@ -29919,13 +29351,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 266 */
+/* 260 */
 /*!********************************!*\
   !*** ./~/lodash/_getRawTag.js ***!
   \********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var Symbol = __webpack_require__(/*! ./_Symbol */ 263);
+	var Symbol = __webpack_require__(/*! ./_Symbol */ 257);
 	
 	/** Used for built-in method references. */
 	var objectProto = Object.prototype;
@@ -29974,7 +29406,7 @@
 
 
 /***/ },
-/* 267 */
+/* 261 */
 /*!*************************************!*\
   !*** ./~/lodash/_objectToString.js ***!
   \*************************************/
@@ -30005,13 +29437,13 @@
 
 
 /***/ },
-/* 268 */
+/* 262 */
 /*!***********************************!*\
   !*** ./~/lodash/_getPrototype.js ***!
   \***********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var overArg = __webpack_require__(/*! ./_overArg */ 269);
+	var overArg = __webpack_require__(/*! ./_overArg */ 263);
 	
 	/** Built-in value references. */
 	var getPrototype = overArg(Object.getPrototypeOf, Object);
@@ -30020,7 +29452,7 @@
 
 
 /***/ },
-/* 269 */
+/* 263 */
 /*!******************************!*\
   !*** ./~/lodash/_overArg.js ***!
   \******************************/
@@ -30044,7 +29476,7 @@
 
 
 /***/ },
-/* 270 */
+/* 264 */
 /*!**********************************!*\
   !*** ./~/lodash/isObjectLike.js ***!
   \**********************************/
@@ -30082,17 +29514,17 @@
 
 
 /***/ },
-/* 271 */
+/* 265 */
 /*!**************************************!*\
   !*** ./~/symbol-observable/index.js ***!
   \**************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(/*! ./lib/index */ 272);
+	module.exports = __webpack_require__(/*! ./lib/index */ 266);
 
 
 /***/ },
-/* 272 */
+/* 266 */
 /*!******************************************!*\
   !*** ./~/symbol-observable/lib/index.js ***!
   \******************************************/
@@ -30104,7 +29536,7 @@
 	  value: true
 	});
 	
-	var _ponyfill = __webpack_require__(/*! ./ponyfill */ 274);
+	var _ponyfill = __webpack_require__(/*! ./ponyfill */ 268);
 	
 	var _ponyfill2 = _interopRequireDefault(_ponyfill);
 	
@@ -30127,10 +29559,10 @@
 	
 	var result = (0, _ponyfill2['default'])(root);
 	exports['default'] = result;
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(/*! ./../../webpack/buildin/module.js */ 273)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(/*! ./../../webpack/buildin/module.js */ 267)(module)))
 
 /***/ },
-/* 273 */
+/* 267 */
 /*!***********************************!*\
   !*** (webpack)/buildin/module.js ***!
   \***********************************/
@@ -30149,7 +29581,7 @@
 
 
 /***/ },
-/* 274 */
+/* 268 */
 /*!*********************************************!*\
   !*** ./~/symbol-observable/lib/ponyfill.js ***!
   \*********************************************/
@@ -30180,7 +29612,7 @@
 	};
 
 /***/ },
-/* 275 */
+/* 269 */
 /*!****************************************!*\
   !*** ./~/redux/lib/combineReducers.js ***!
   \****************************************/
@@ -30191,13 +29623,13 @@
 	exports.__esModule = true;
 	exports['default'] = combineReducers;
 	
-	var _createStore = __webpack_require__(/*! ./createStore */ 260);
+	var _createStore = __webpack_require__(/*! ./createStore */ 254);
 	
-	var _isPlainObject = __webpack_require__(/*! lodash/isPlainObject */ 261);
+	var _isPlainObject = __webpack_require__(/*! lodash/isPlainObject */ 255);
 	
 	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 	
-	var _warning = __webpack_require__(/*! ./utils/warning */ 276);
+	var _warning = __webpack_require__(/*! ./utils/warning */ 270);
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
@@ -30331,7 +29763,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/process/browser.js */ 10)))
 
 /***/ },
-/* 276 */
+/* 270 */
 /*!**************************************!*\
   !*** ./~/redux/lib/utils/warning.js ***!
   \**************************************/
@@ -30364,7 +29796,7 @@
 	}
 
 /***/ },
-/* 277 */
+/* 271 */
 /*!*******************************************!*\
   !*** ./~/redux/lib/bindActionCreators.js ***!
   \*******************************************/
@@ -30423,7 +29855,7 @@
 	}
 
 /***/ },
-/* 278 */
+/* 272 */
 /*!****************************************!*\
   !*** ./~/redux/lib/applyMiddleware.js ***!
   \****************************************/
@@ -30437,7 +29869,7 @@
 	
 	exports['default'] = applyMiddleware;
 	
-	var _compose = __webpack_require__(/*! ./compose */ 279);
+	var _compose = __webpack_require__(/*! ./compose */ 273);
 	
 	var _compose2 = _interopRequireDefault(_compose);
 	
@@ -30489,7 +29921,7 @@
 	}
 
 /***/ },
-/* 279 */
+/* 273 */
 /*!********************************!*\
   !*** ./~/redux/lib/compose.js ***!
   \********************************/
@@ -30535,7 +29967,669 @@
 	}
 
 /***/ },
+/* 274 */
+/*!******************************!*\
+  !*** ./app/actions/index.js ***!
+  \******************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.setCountdownSec = exports.setTimerSec = exports.setCountdownStatus = exports.setTimerStatus = undefined;
+	
+	var _ActionTypes = __webpack_require__(/*! ./ActionTypes */ 275);
+	
+	var Types = _interopRequireWildcard(_ActionTypes);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+	
+	var setTimerStatus = exports.setTimerStatus = function setTimerStatus(status) {
+	  return {
+	    type: Types.SET_TIMER_STATUS,
+	    status: status
+	  };
+	}; //action creators
+	var setCountdownStatus = exports.setCountdownStatus = function setCountdownStatus(status) {
+	  return {
+	    type: Types.SET_COUNTDOWN_STATUS,
+	    status: status
+	  };
+	};
+	
+	var setTimerSec = exports.setTimerSec = function setTimerSec(sec) {
+	  return {
+	    type: Types.SET_TIMER_SEC,
+	    sec: sec
+	  };
+	};
+	
+	var setCountdownSec = exports.setCountdownSec = function setCountdownSec(sec) {
+	  return {
+	    type: Types.SET_COUNTDOWN_SEC,
+	    sec: sec
+	  };
+	};
+
+/***/ },
+/* 275 */
+/*!************************************!*\
+  !*** ./app/actions/ActionTypes.js ***!
+  \************************************/
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	// Timer
+	var SET_TIMER_STATUS = exports.SET_TIMER_STATUS = 'SET_TIMER_STATUS';
+	var SET_TIMER_SEC = exports.SET_TIMER_SEC = 'SET_TIMER_SEC';
+	
+	//Countdown
+	var SET_COUNTDOWN_STATUS = exports.SET_COUNTDOWN_STATUS = 'SET_COUNTDOWN_STATUS';
+	var SET_COUNTDOWN_SEC = exports.SET_COUNTDOWN_SEC = 'SET_COUNTDOWN_SEC';
+
+/***/ },
+/* 276 */
+/*!*********************************!*\
+  !*** ./app/components/Clock.js ***!
+  \*********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
+	var Clock = function Clock(props) {
+	  var totalSec = props.totalSec,
+	      countStatus = props.countStatus;
+	  //------- helper functions
+	
+	  var formatSeconds = function formatSeconds(totalSeconds) {
+	    var sec = totalSeconds % 60;
+	    var min = Math.floor(totalSeconds / 60);
+	    // check for less than 10
+	    if (sec < 10) {
+	      sec = '0' + sec;
+	    }
+	
+	    if (min < 10) {
+	      min = '0' + min;
+	    }
+	
+	    return String(min) + ':' + String(sec);
+	  };
+	
+	  var renderClock = function renderClock() {
+	    if (countStatus == 'stopped') {
+	      return _react2['default'].createElement(
+	        'div',
+	        { className: 'clock primary' },
+	        _react2['default'].createElement(
+	          'span',
+	          { className: 'sec' },
+	          formatSeconds(totalSec)
+	        )
+	      );
+	    } else {
+	      return _react2['default'].createElement(
+	        'div',
+	        { className: 'clock alert' },
+	        _react2['default'].createElement(
+	          'span',
+	          { className: 'sec' },
+	          formatSeconds(totalSec)
+	        )
+	      );
+	    }
+	  };
+	  // --------
+	
+	  return renderClock();
+	};
+	
+	Clock.propTypes = {
+	  totalSec: _react.PropTypes.number,
+	  countStatus: _react.PropTypes.string
+	};
+	
+	//checks
+	Clock.defaultProps = {
+	  totalSec: 0,
+	  countStatus: 'stopped'
+	};
+	
+	exports['default'] = Clock;
+
+/***/ },
+/* 277 */
+/*!************************************!*\
+  !*** ./app/components/Controls.js ***!
+  \************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
+	var Controls = function Controls(props) {
+	  var countStatus = props.countStatus,
+	      setCountStatus = props.setCountStatus;
+	
+	  var renderStartStopBtn = function renderStartStopBtn() {
+	    if (countStatus == 'counting') {
+	      return _react2['default'].createElement(
+	        'div',
+	        { className: 'button-group' },
+	        _react2['default'].createElement(
+	          'button',
+	          { className: 'button alert pause', onClick: function () {
+	              function onClick(e) {
+	                return setCountStatus('paused');
+	              }
+	
+	              return onClick;
+	            }() },
+	          'Pause'
+	        )
+	      );
+	    } else {
+	      return _react2['default'].createElement(
+	        'div',
+	        { className: 'button-group' },
+	        _react2['default'].createElement(
+	          'button',
+	          { className: 'button primary start', onClick: function () {
+	              function onClick(e) {
+	                return setCountStatus('counting');
+	              }
+	
+	              return onClick;
+	            }() },
+	          'Start'
+	        )
+	      );
+	    }
+	  };
+	
+	  return _react2['default'].createElement(
+	    'div',
+	    { className: 'controls' },
+	    renderStartStopBtn(),
+	    _react2['default'].createElement(
+	      'button',
+	      { className: 'button hollow primary clear', onClick: function () {
+	          function onClick(e) {
+	            return setCountStatus('stopped');
+	          }
+	
+	          return onClick;
+	        }() },
+	      'Clear'
+	    )
+	  );
+	};
+	
+	Controls.propTypes = {
+	  countStatus: _react.PropTypes.string,
+	  setCountStatus: _react.PropTypes.func
+	};
+	
+	exports['default'] = Controls;
+
+/***/ },
+/* 278 */
+/*!*************************************!*\
+  !*** ./app/containers/Countdown.js ***!
+  \*************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _Clock = __webpack_require__(/*! Clock */ 276);
+	
+	var _Clock2 = _interopRequireDefault(_Clock);
+	
+	var _CountdownForm = __webpack_require__(/*! CountdownForm */ 279);
+	
+	var _CountdownForm2 = _interopRequireDefault(_CountdownForm);
+	
+	var _Controls = __webpack_require__(/*! Controls */ 277);
+	
+	var _Controls2 = _interopRequireDefault(_Controls);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	//Components
+	
+	
+	var Countdown = function (_Component) {
+	  _inherits(Countdown, _Component);
+	
+	  function Countdown(props) {
+	    _classCallCheck(this, Countdown);
+	
+	    var _this = _possibleConstructorReturn(this, (Countdown.__proto__ || Object.getPrototypeOf(Countdown)).call(this, props));
+	
+	    _this.state = {
+	      totalSec: 0,
+	      countStatus: 'stopped'
+	    };
+	    return _this;
+	  }
+	
+	  _createClass(Countdown, [{
+	    key: 'shouldComponentUpdate',
+	    value: function () {
+	      function shouldComponentUpdate(nextProps, nextState) {
+	        if (nextState.countStatus == 'paused') {
+	          clearTimeout(this.timer);
+	          return true;
+	        } else if (nextState.countStatus == 'stopped') {
+	          nextState.totalSec = 0;
+	          return true;
+	        } else {
+	          return true;
+	        }
+	      }
+	
+	      return shouldComponentUpdate;
+	    }()
+	  }, {
+	    key: 'render',
+	    value: function () {
+	      function render() {
+	        var _state = this.state,
+	            totalSec = _state.totalSec,
+	            countStatus = _state.countStatus;
+	
+	        return _react2['default'].createElement(
+	          'div',
+	          { className: 'countdown' },
+	          _react2['default'].createElement(
+	            'h1',
+	            null,
+	            'Countdown'
+	          ),
+	          _react2['default'].createElement(_Clock2['default'], { totalSec: totalSec, countStatus: countStatus }),
+	          this.renderControlArea(countStatus)
+	        );
+	      }
+	
+	      return render;
+	    }()
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function () {
+	      function componentDidUpdate(prevProps, prevState) {
+	        var _this2 = this;
+	
+	        var _state2 = this.state,
+	            totalSec = _state2.totalSec,
+	            countStatus = _state2.countStatus;
+	
+	        if (totalSec > 0 && countStatus == 'counting') {
+	          //keep ticking
+	          this.timer = setTimeout(function () {
+	            _this2.setTotalSec(totalSec - 1);
+	          }, 1000);
+	        } else if (this.state.countStatus == 'counting') {
+	          this.setCountStatus('stopped');
+	        }
+	      }
+	
+	      return componentDidUpdate;
+	    }()
+	    // componentWillMount() {
+	    //   console.log('countdown component will mount')
+	    // }
+	
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function () {
+	      function componentWillUnmount() {
+	        clearTimeout(this.timer);
+	      }
+	
+	      return componentWillUnmount;
+	    }()
+	
+	    //---helper functions
+	
+	  }, {
+	    key: 'setTotalSec',
+	    value: function () {
+	      function setTotalSec(sec) {
+	        this.setState({
+	          totalSec: sec
+	        });
+	      }
+	
+	      return setTotalSec;
+	    }()
+	  }, {
+	    key: 'setCountStatus',
+	    value: function () {
+	      function setCountStatus(status) {
+	        this.setState({
+	          countStatus: status
+	        });
+	      }
+	
+	      return setCountStatus;
+	    }()
+	  }, {
+	    key: 'renderControlArea',
+	    value: function () {
+	      function renderControlArea(status) {
+	        var _this3 = this;
+	
+	        if (status !== 'stopped') {
+	          return _react2['default'].createElement(_Controls2['default'], {
+	            countStatus: this.state.countStatus,
+	            setCountStatus: function () {
+	              function setCountStatus(status) {
+	                return _this3.setCountStatus(status);
+	              }
+	
+	              return setCountStatus;
+	            }()
+	          });
+	        } else {
+	          return _react2['default'].createElement(_CountdownForm2['default'], {
+	            setTotalSec: function () {
+	              function setTotalSec(sec) {
+	                return _this3.setTotalSec(sec);
+	              }
+	
+	              return setTotalSec;
+	            }(),
+	            setCountStatus: function () {
+	              function setCountStatus(status) {
+	                return _this3.setCountStatus(status);
+	              }
+	
+	              return setCountStatus;
+	            }()
+	          });
+	        }
+	      }
+	
+	      return renderControlArea;
+	    }()
+	
+	    //----
+	
+	  }]);
+	
+	  return Countdown;
+	}(_react.Component);
+	
+	exports['default'] = Countdown;
+
+/***/ },
+/* 279 */
+/*!*****************************************!*\
+  !*** ./app/components/CountdownForm.js ***!
+  \*****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var CountdownForm = function (_Component) {
+	  _inherits(CountdownForm, _Component);
+	
+	  function CountdownForm(props) {
+	    _classCallCheck(this, CountdownForm);
+	
+	    return _possibleConstructorReturn(this, (CountdownForm.__proto__ || Object.getPrototypeOf(CountdownForm)).call(this, props));
+	  }
+	
+	  _createClass(CountdownForm, [{
+	    key: 'render',
+	    value: function () {
+	      function render() {
+	        var _this2 = this;
+	
+	        return _react2['default'].createElement(
+	          'form',
+	          { className: 'countdown-form', onSubmit: function () {
+	              function onSubmit(e) {
+	                return _this2.onSubmitSec(e);
+	              }
+	
+	              return onSubmit;
+	            }() },
+	          _react2['default'].createElement('input', { type: 'text', placeholder: '\u8F38\u5165\u7E3D\u79D2\u6578', ref: 'secField' }),
+	          _react2['default'].createElement(
+	            'button',
+	            { className: 'button expanded' },
+	            '\u958B\u59CB\u5012\u6578'
+	          )
+	        );
+	      }
+	
+	      return render;
+	    }()
+	  }, {
+	    key: 'onSubmitSec',
+	    value: function () {
+	      function onSubmitSec(e) {
+	        e.preventDefault();
+	        var setTotalSec = this.props.setTotalSec;
+	        var setCountStatus = this.props.setCountStatus;
+	        var inputField = this.refs.secField.value;
+	
+	        if (inputField.length > 0 && inputField.match(/^[0-9]*$/)) {
+	          var totalSec = Number(inputField);
+	          this.refs.secField.value = "";
+	          setTotalSec(totalSec);
+	          setCountStatus('counting');
+	        } else {
+	          this.refs.secField.focus();
+	        }
+	      }
+	
+	      return onSubmitSec;
+	    }()
+	  }]);
+	
+	  return CountdownForm;
+	}(_react.Component);
+	
+	// CountdownForm.propTypes = {
+	//   setTotalSec: PropTypes.func,
+	//   setCountStatus: PropTypes.func
+	// }
+	
+	exports['default'] = CountdownForm;
+
+/***/ },
 /* 280 */
+/*!*********************************!*\
+  !*** ./app/components/About.js ***!
+  \*********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	var About = function About() {
+	  return _react2["default"].createElement(
+	    "div",
+	    { className: "about" },
+	    _react2["default"].createElement(
+	      "h1",
+	      null,
+	      "\u95DC\u65BC\u4F5C\u8005"
+	    ),
+	    _react2["default"].createElement(
+	      "h6",
+	      { className: "center" },
+	      "\u937E\u66DC\u5E74 Jay Chung"
+	    ),
+	    _react2["default"].createElement(
+	      "h6",
+	      { className: "center" },
+	      "Github: ",
+	      _react2["default"].createElement(
+	        "a",
+	        { href: "https://github.com/xJkit", target: "_blank" },
+	        "xJkit"
+	      )
+	    ),
+	    _react2["default"].createElement(
+	      "div",
+	      { className: "description" },
+	      _react2["default"].createElement(
+	        "p",
+	        null,
+	        "\u4E00\u500B\u7531 React \u5BE6\u4F5C\u7684 Single Page Application\uFF08\u55AE\u9801\u61C9\u7528\u7A0B\u5F0F\uFF09\u3002"
+	      ),
+	      _react2["default"].createElement(
+	        "p",
+	        null,
+	        "\u7D93\u904E\u4E09\u5230\u56DB\u500B\u5C0F\u578B\u5C08\u6848\u7684\u6B77\u7DF4\uFF0C\u6211\u8A8D\u70BA\u8F03\u4F73\u7684 React \u5C08\u6848\u5FC5\u9808\u5177\u5099\u4E0B\u5217\u689D\u4EF6\uFF1A"
+	      ),
+	      _react2["default"].createElement(
+	        "ol",
+	        null,
+	        _react2["default"].createElement(
+	          "li",
+	          null,
+	          "\u61C2\u5F97\u9078\u64C7 Smart Components \u4EE5\u53CA Dumb Components\uFF08\u4E5F\u5C31\u662F Class-based Components \u8207 Stateless Functional Components\uFF09"
+	        ),
+	        _react2["default"].createElement(
+	          "li",
+	          null,
+	          "\u540C\u6642\u5BEB\u6E2C\u8A66\u3002\u500B\u4EBA\u89BA\u5F97\u9019\u5F88\u91CD\u8981\uFF0C\u4F46\u662F\u6E2C\u8A66\u771F\u7684\u5F88\u7121\u804A...\u800C\u4E14\u4E5F\u5F88\u96E3\u4E0A\u624B\uFF01"
+	        ),
+	        _react2["default"].createElement(
+	          "li",
+	          null,
+	          "\u6700\u597D\u9075\u7167 Functional Programming \u7684\u539F\u5247\u53BB\u5BEB React\uFF08\u5305\u542B pure functions, \u907F\u514D side effects \u4EE5\u53CA immutable data\uFF09"
+	        ),
+	        _react2["default"].createElement(
+	          "li",
+	          null,
+	          "\u8981\u975E\u5E38\u4E86\u89E3 Component Life Cycle. \u5728\u8A08\u6642\u5668\u4E0D\u65B7\u6539\u8B8A State \u7684\u60C5\u6CC1\u4E0B\u53EA\u8981\u67D0\u500B\u751F\u547D\u9031\u671F\u767C\u751F\u610F\u5916\u90FD\u6703\u51FA\u932F\uFF0C\u4F8B\u5982 componentWillUnmount \u8981\u6E05\u6389 setTimeout..."
+	        )
+	      ),
+	      _react2["default"].createElement(
+	        "p",
+	        null,
+	        "\u6211\u4E5F\u662F React \u521D\u65B0\u624B\uFF0C\u53EA\u662F\u6709\u5BEB\u904E\u5E7E\u500B\u5C0F\u5C08\u6848\u6709\u6F38\u6F38\u9032\u5165\u72C0\u6CC1\u7684\u8DA8\u52E2\u3002\u96D6\u7136\u5B78\u7FD2 React \u904E\u7A0B\u8F9B\u82E6\uFF0C\u4F46\u662F\u7576\u4F60\u4E86\u89E3 React \u7684\u7CBE\u795E\u5F8C\u89BA\u5F97\u5BEB\u524D\u7AEF\u975E\u5E38\u7F8E\u597D\uFF0C\u800C\u4E14\u7528 JavaScript \u4F86\u523B\u5283\u7DB2\u9801\u975E\u5E38\u6709\u723D\u611F\u5436\uFF01\u6B61\u8FCE\u6709\u4EFB\u4F55\u554F\u984C\u53EF\u5BC4\u4FE1\u5230 ",
+	        _react2["default"].createElement(
+	          "a",
+	          { href: "mailto:joey54780@gmail.com" },
+	          "joey54780@gmail.com"
+	        ),
+	        " \u4E00\u8D77\u8A0E\u8AD6 React \u7684\u7A2E\u7A2E\u7F8E\u597D\uFF0C\u7A0B\u5F0F\u78BC\u6709\u7F3A\u9677\u4E5F\u4E0D\u541D\u8CDC\u6559\uFF0C\u56E0\u70BA\u6211\u4EE5\u6210\u70BA JS \u5927\u5927\u70BA\u76EE\u6A19\u9081\u9032\uFF0C\u4F60\u4E5F\u53EF\u4EE5\u548C\u6211\u4E00\u8D77\u9032\u6B65\uFF01"
+	      ),
+	      _react2["default"].createElement(
+	        "p",
+	        { className: "center" },
+	        "\u611F\u6069 React\uFF0C\u8B9A\u5606 React\u3002"
+	      )
+	    )
+	  );
+	};
+	
+	exports["default"] = About;
+
+/***/ },
+/* 281 */
+/*!************************************!*\
+  !*** ./app/components/NotFound.js ***!
+  \************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
+	var NotFound = function NotFound(props) {
+	  return _react2['default'].createElement(
+	    'div',
+	    null,
+	    'Not Found and You got 404 Error. Please back to the home page.'
+	  );
+	};
+	
+	exports['default'] = NotFound;
+
+/***/ },
+/* 282 */
 /*!*************************************!*\
   !*** ./app/store/configureStore.js ***!
   \*************************************/
@@ -30547,9 +30641,9 @@
 	  value: true
 	});
 	
-	var _redux = __webpack_require__(/*! redux */ 259);
+	var _redux = __webpack_require__(/*! redux */ 253);
 	
-	var _reducers = __webpack_require__(/*! ../reducers */ 281);
+	var _reducers = __webpack_require__(/*! ../reducers */ 283);
 	
 	var _reducers2 = _interopRequireDefault(_reducers);
 	
@@ -30565,7 +30659,7 @@
 	exports['default'] = configureStore;
 
 /***/ },
-/* 281 */
+/* 283 */
 /*!*******************************!*\
   !*** ./app/reducers/index.js ***!
   \*******************************/
@@ -30577,13 +30671,13 @@
 	  value: true
 	});
 	
-	var _redux = __webpack_require__(/*! redux */ 259);
+	var _redux = __webpack_require__(/*! redux */ 253);
 	
-	var _secReducer = __webpack_require__(/*! ./secReducer */ 282);
+	var _secReducer = __webpack_require__(/*! ./secReducer */ 284);
 	
 	var _secReducer2 = _interopRequireDefault(_secReducer);
 	
-	var _statusReducer = __webpack_require__(/*! ./statusReducer */ 284);
+	var _statusReducer = __webpack_require__(/*! ./statusReducer */ 285);
 	
 	var _statusReducer2 = _interopRequireDefault(_statusReducer);
 	
@@ -30598,7 +30692,7 @@
 	exports['default'] = rootReducer;
 
 /***/ },
-/* 282 */
+/* 284 */
 /*!************************************!*\
   !*** ./app/reducers/secReducer.js ***!
   \************************************/
@@ -30610,7 +30704,7 @@
 	  value: true
 	});
 	
-	var _ActionTypes = __webpack_require__(/*! ../actions/ActionTypes */ 283);
+	var _ActionTypes = __webpack_require__(/*! ../actions/ActionTypes */ 275);
 	
 	var Types = _interopRequireWildcard(_ActionTypes);
 	
@@ -30633,27 +30727,7 @@
 	exports['default'] = secReducer;
 
 /***/ },
-/* 283 */
-/*!************************************!*\
-  !*** ./app/actions/ActionTypes.js ***!
-  \************************************/
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	// Timer
-	var SET_TIMER_STATUS = exports.SET_TIMER_STATUS = 'SET_TIMER_STATUS';
-	var SET_TIMER_SEC = exports.SET_TIMER_SEC = 'SET_TIMER_SEC';
-	
-	//Countdown
-	var SET_COUNTDOWN_STATUS = exports.SET_COUNTDOWN_STATUS = 'SET_COUNTDOWN_STATUS';
-	var SET_COUNTDOWN_SEC = exports.SET_COUNTDOWN_SEC = 'SET_COUNTDOWN_SEC';
-
-/***/ },
-/* 284 */
+/* 285 */
 /*!***************************************!*\
   !*** ./app/reducers/statusReducer.js ***!
   \***************************************/
@@ -30665,14 +30739,14 @@
 	  value: true
 	});
 	
-	var _ActionTypes = __webpack_require__(/*! ../actions/ActionTypes */ 283);
+	var _ActionTypes = __webpack_require__(/*! ../actions/ActionTypes */ 275);
 	
 	var Types = _interopRequireWildcard(_ActionTypes);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 	
 	var statusReducer = function statusReducer() {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'stopped';
 	  var action = arguments[1];
 	
 	  switch (action.type) {
@@ -30688,7 +30762,7 @@
 	exports['default'] = statusReducer;
 
 /***/ },
-/* 285 */
+/* 286 */
 /*!*****************************************************************************!*\
   !*** ./~/style-loader!./~/css-loader!./~/sass-loader!./app/styles/app.scss ***!
   \*****************************************************************************/
@@ -30697,10 +30771,10 @@
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../~/css-loader!./../../~/sass-loader!./app.scss */ 286);
+	var content = __webpack_require__(/*! !./../../~/css-loader!./../../~/sass-loader!./app.scss */ 287);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(/*! ./../../~/style-loader/addStyles.js */ 288)(content, {});
+	var update = __webpack_require__(/*! ./../../~/style-loader/addStyles.js */ 289)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -30717,13 +30791,13 @@
 	}
 
 /***/ },
-/* 286 */
+/* 287 */
 /*!************************************************************!*\
   !*** ./~/css-loader!./~/sass-loader!./app/styles/app.scss ***!
   \************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(/*! ./../../~/css-loader/lib/css-base.js */ 287)();
+	exports = module.exports = __webpack_require__(/*! ./../../~/css-loader/lib/css-base.js */ 288)();
 	// imports
 	
 	
@@ -30734,7 +30808,7 @@
 
 
 /***/ },
-/* 287 */
+/* 288 */
 /*!**************************************!*\
   !*** ./~/css-loader/lib/css-base.js ***!
   \**************************************/
@@ -30793,7 +30867,7 @@
 
 
 /***/ },
-/* 288 */
+/* 289 */
 /*!*************************************!*\
   !*** ./~/style-loader/addStyles.js ***!
   \*************************************/
